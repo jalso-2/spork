@@ -1,17 +1,19 @@
 {
-  "name": "immersion-2017-03-greenfield",
+  "name": "spork",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Spork is an app that helps users find recipes for leftover food",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "start-dev": "nodemon server.js"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/zacharybergmann/immersion-2017-03-greenfield.git"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "jayfrank0528@gmail.com, jwgoedert@gmail.com, zbbergma@gmail.com",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/zacharybergmann/immersion-2017-03-greenfield/issues"
   },
