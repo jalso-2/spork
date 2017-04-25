@@ -28,4 +28,3 @@ app.get('*', (req, res) => res.sendFile(path.resolve(__dirname, 'index.html')));
 
 app.listen(PORT, () => console.log(`Server is up and listening on port ${PORT}!`));
 
-console.log('hello zachary');
