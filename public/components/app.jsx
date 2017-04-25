@@ -6,6 +6,7 @@ const App = props => (
     <nav>
       <li><IndexLink to="/">Home</IndexLink></li>
       <li><Link to="/contact">Contact</Link></li>
+      <li><Link to="/profile">Profile</Link></li>
     </nav>
     {props.children}
   </div>
