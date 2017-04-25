@@ -42,3 +42,4 @@ app.use(require('webpack-hot-middleware')(compiler));
 /* ***********End MiddleWare************** */
 
 app.get('*', (req, res) => res.sendFile(path.resolve(__dirname, 'index.html')));
+
