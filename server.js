@@ -42,28 +42,25 @@ app.use(require('webpack-hot-middleware')(compiler));
 /* ***********End MiddleWare************** */
 
 app.post('/my_ingredients', (req, res) => {
-  const id = '58ff857a393ab009f8f172dc';
+  const id = 'testid';
   const ingredient = req.body.ingredient;
-  console.log(req.body, 'req.boday!!!');
 
   User.updateOne({ _id: id }, { $push: { currentListOfIngredients: ingredient } }, (err, data) => {
     if (err) {
       console.error(err, 'Error');
     } else {
-      console.log(data);
       res.send('Hello Moto!');
     }
   });
 });
 
 app.get('/my_ingredients', (req, res) => {
-  let id = '58ff857a393ab009f8f172dc';
-  console.log('GET THAT SHIT!!!!!!!!!');
+  let id = 'testid';
+
   User.find({ _id: id }, 'currentListOfIngredients', (err, data) => {
     if (err) {
       console.error(err, 'Error');
     } else {
-      console.log(data.currentListOfIngredients);
       res.send(data[0].currentListOfIngredients);
     }
   });

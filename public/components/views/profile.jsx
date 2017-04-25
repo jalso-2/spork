@@ -21,7 +21,6 @@ export default class App extends Component {
   onSubmit(e) {
     e.preventDefault();
     const value = this.title.value;
-    console.log(value);
     updateIngredients(value);
   }
   getMyIngredients() {
