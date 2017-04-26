@@ -1,7 +1,6 @@
 /* eslint no-console: ["error", { allow: ["warn", "error"] }] */
-
 require('dotenv').config();
-const path = require('path');
+
 const axios = require('axios');
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -86,9 +85,6 @@ app.get('/my_ingredients', (req, res) => {
 });
 
 app.get('/find_recipe/*', (req, res) => {
-  console.log(req.params[0], 'params');
-  console.log('inside find recipe');
-
   const query = req.params[0].replace('/', '%20');
 
   axios.get(`http://api.edamam.com/search?q=${query}`, {
@@ -101,6 +97,55 @@ app.get('/find_recipe/*', (req, res) => {
     .catch((err) => {
       console.log(err);
     });
+});
+
+app.post('/save_recipe', (req, res) => {
+  const recipeName = req.body.recipe;
+  const id = testIdKey;
+
+  const newRecipe = new Recipe({
+    recipeName: recipeName.name,
+    image: recipeName.image,
+    ingredients: recipeName.ingredients,
+    url: recipeName.url });
+
+  Recipe.find({ recipeName: recipeName.name }, (err, data) => {
+    if (err) {
+      console.error(err, 'Error!');
+    } else {
+      console.log(data, 'newRecipe');
+      newRecipe.save((error, result) => {
+        if (error) {
+          console.error(error, 'Error on save');
+          Recipe.updateOne({ recipeName: recipeName.name }, { $push: { likedBy: id } }, (prob, success) => {
+            if (err) {
+              console.error(prob, 'Error');
+            } else {
+              console.log(success, 'updated');
+              res.send('in there like swimwear!!!');
+            }
+          });
+        } else {
+          console.log(result, 'result');
+          User.updateOne({ _id: id }, { $push: { likedRecipes: result._id } }, (problem, updated) => {
+            if (err) {
+              console.error(problem, 'Error');
+            } else {
+              console.log(updated, 'updated');
+              Recipe.updateOne({ _id: result._id }, { $push: { likedBy: id } }, (prob, success) => {
+                if (err) {
+                  console.error(prob, 'Error');
+                } else {
+                  console.log(success, 'updated');
+                  res.send('in there like swimwear!!!');
+                }
+              });
+            }
+          });
+        }
+      });
+    }
+  });
 });
 
 app.get('*', (req, res) => res.sendFile(path.resolve(__dirname, 'index.html')));

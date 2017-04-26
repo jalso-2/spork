@@ -1,25 +1,8 @@
 import React, { Component } from 'react';
-import { updateIngredients, saveRecipe } from '../utilities/utils';
+import { Ingredient, Recipes, updateIngredients, saveRecipe } from '../utilities/utils';
+
 const axios = require('axios');
 
-
-class Ingredient extends React.Component {
-  render() {
-    return (<li>{this.props.item}</li>);
-  }
-}
-
-class Recipies extends React.Component {
-  render() {
-    return (<li >
-      <div>{this.props.item.name}</div>
-      <div><img src={this.props.item.image} /></div>
-      <div>{this.props.item.ingredients}</div>
-      <div>{this.props.item.url}</div>
-      </li>
-    );
-  }
-}
 export default class App extends Component {
   constructor(props) {
     super(props);
@@ -30,10 +13,15 @@ export default class App extends Component {
     };
     this.getMyIngredients();
   }
+  resetInput() {
+    this.title.value = '';
+  }
   onSubmit(e) {
     e.preventDefault();
     const value = this.title.value;
     updateIngredients(value);
+    this.resetInput();
+    this.getMyIngredients();
   }
   getMyIngredients() {
     axios.get('/my_ingredients')
@@ -48,38 +36,55 @@ export default class App extends Component {
     const params = ingredients.replace(',', '/');
     axios.get(`/find_recipe/${params}`)
       .then((response) => {
-        const recipies = response.data.hits.map((recipe) => {
-          return { name: recipe.recipe.label,
-            ingredients: recipe.recipe.ingredientLines,
-            image: recipe.recipe.image,
-            url: recipe.recipe.uri };
-        });
+        const recipies = response.data.hits.map(recipe => ({ name: recipe.recipe.label,
+          ingredients: recipe.recipe.ingredientLines,
+          image: recipe.recipe.image,
+          url: recipe.recipe.uri }));
         this.setState({ recipies });
         this.render();
       });
+  }
+  likeRecipe(recipe) {
+    saveRecipe(recipe);
   }
   render() {
     return (
       <div id="home">
         This is the profile page.
-         <form className="form-horizontal">
-           <input type="text" ref={c => this.title = c} name="title" placeholder="Enter Your Ingredients Here" />
-         </form>
-        <button type="button" onClick={this.onSubmit.bind(this)} >Save</button>
+        <div>
+          <form>
+            <input
+              type="text"
+              ref={c => this.title = c}
+              name="title"
+              placeholder="Enter Your Ingredients Here"
+            />
+            <button type="button" onClick={this.onSubmit.bind(this)} >Save</button>
+          </form>
+        </div>
         <div>
           <ul>
-            {this.state.ingredients.map((item, key) => <Ingredient item={item} key={key} />)}
+            {this.state.ingredients
+              .map((item, key) => <Ingredient item={item} key={key} />)}
           </ul>
         </div>
         <div>
-          <form className="form-horizontal">
-           <input type="text" ref={c => this.title = c} name="title" placeholder="Search For Recipies Here" />
-         </form>
-        <button type="button" onClick={this.getRecipe.bind(this)} >Save</button>
+          <form>
+            <input
+              type="text"
+              ref={c => this.title = c}
+              name="title"
+              placeholder="Search For Recipies Here"
+            />
+            <button type="button" onClick={this.getRecipe.bind(this)} >Save</button>
+          </form>
         </div>
-         <ul>
-            {this.state.recipies.map((item, key) => <Recipies item={item} key={key} />)}
-        </ul>
+        <div>
+          <ul>
+            {this.state.recipies
+              .map((item, key) => <Recipes item={item} key={key} likeRecipe={this.likeRecipe} />)}
+          </ul>
+        </div>
       </div>
     );
   }
