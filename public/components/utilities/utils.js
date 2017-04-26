@@ -5,10 +5,9 @@ const updateIngredients = (ingredient) => {
     .then(response => response);
 };
 
-const getMyIngredients = () => {
-  axios.get('/my_ingredients')
-    .then(response => response.data);
+const saveRecipe = () => {
+  console.log('save recipe');
 };
 
 module.exports.updateIngredients = updateIngredients;
-module.exports.getMyIngredients = getMyIngredients;
+module.exports.saveRecipe = saveRecipe;
