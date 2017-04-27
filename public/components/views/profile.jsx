@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
-import { Ingredient, Recipes, updateIngredients, saveRecipe } from '../utilities/utils';
+import { Ingredient,
+    Recipes,
+    updateIngredients,
+    saveRecipe,
+    sendSMS } from '../utilities/utils';
 
 const axios = require('axios');
 
@@ -76,7 +80,7 @@ export default class App extends Component {
               name="title"
               placeholder="Search For Recipies Here"
             />
-            <button type="button" onClick={this.getRecipe.bind(this)} >Save</button>
+            <button type="button" onClick={this.getRecipe.bind(this)}>Search Recipes</button>
           </form>
         </div>
         <div>
@@ -84,6 +88,9 @@ export default class App extends Component {
             {this.state.recipies
               .map((item, key) => <Recipes item={item} key={key} likeRecipe={this.likeRecipe} />)}
           </ul>
+        </div>
+        <div>
+          <button type="button" onClick={sendSMS}>Let's Eat!</button>
         </div>
       </div>
     );

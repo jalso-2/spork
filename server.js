@@ -9,17 +9,27 @@ const webpack = require('webpack');
 const config = require('./webpack.config.dev.js');
 const User = require('./models/userModel.js');
 const Recipe = require('./models/recipeModel.js');
+const path = require('path');
+
 const compiler = webpack(config);
 
 const PORT = process.env.PORT || 3000;
 const MONGOURI = process.env.MONGOURI;
 const testIdKey = process.env.DBTESTID;
 const key = process.env.EDAMAMKEY;
+const accountSid = process.env.TWILIO_AUTH_SID;
+const authToken = process.env.TWILIO_AUTH_TOKEN;
+const testNumber = process.env.TESTNUMBER;
+const twilioNumber = process.env.TWILIONUMBER;
+
+const client = require('twilio')(accountSid, authToken);
+
 
 const conn = mongoose.connection;
 mongoose.connect(MONGOURI);
 
 const app = express();
+
 
 conn.on('error', console.error.bind(console, 'connection error:'));
 
@@ -144,6 +154,22 @@ app.post('/save_recipe', (req, res) => {
           });
         }
       });
+    }
+  });
+});
+
+app.get('/lets_eat', (req, res) => {
+  client.messages.create({
+    to: `+${testNumber}`,
+    from: `+${twilioNumber}`,
+    body: 'This is the ship that made the Kessel Run in fourteen parsecs?',
+    mediaUrl: 'https://c1.staticflickr.com/3/2899/14341091933_1e92e62d12_b.jpg',
+  }, (err, message) => {
+    if (err) {
+      console.error(err, 'Error');
+    } else {
+      console.log(message);
+      res.send('howdy do');
     }
   });
 });
