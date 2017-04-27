@@ -34,8 +34,16 @@ const saveRecipe = (recipe) => {
     .then(response => response);
 };
 
+const sendSMS = () => {
+  axios.get('/lets_eat')
+    .then(response => console.log(response));
+  console.log('sms clicked');
+};
+
 module.exports.updateIngredients = updateIngredients;
 module.exports.saveRecipe = saveRecipe;
+module.exports.sendSMS = sendSMS;
 module.exports.Ingredient = Ingredient;
 module.exports.Recipes = Recipes;
+
 
