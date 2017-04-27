@@ -56,7 +56,9 @@ app.post('/test_user', (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
 
-  const user = new User({ username, password });
+  const phoneNumber = req.body.phoneNumber;
+  const email = req.body.email;
+  const user = new User({ username, password, phoneNumber, email });
 
   user.save((err) => {
     if (err) {
