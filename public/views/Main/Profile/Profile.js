@@ -3,7 +3,7 @@ import { Ingredient,
     Recipes,
     updateIngredients,
     saveRecipe,
-    sendSMS } from '../utilities/utils';
+    sendSMS } from '../../../utils/utils';
 
 const axios = require('axios');
 
