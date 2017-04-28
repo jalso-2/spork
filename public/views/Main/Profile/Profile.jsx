@@ -17,9 +17,6 @@ export default class App extends Component {
     };
     this.getMyIngredients();
   }
-  resetInput() {
-    this.title.value = '';
-  }
   onSubmit(e) {
     e.preventDefault();
     const value = this.title.value;
@@ -36,6 +33,9 @@ export default class App extends Component {
     const value = this.title.value;
     this.findRecipe(value);
   }
+  resetInput() {
+    this.title.value = '';
+  }
   findRecipe(ingredients) {
     const params = ingredients.replace(',', '/');
     axios.get(`/find_recipe/${params}`)
@@ -49,7 +49,7 @@ export default class App extends Component {
       });
   }
   likeRecipe(recipe) {
-    saveRecipe(recipe);
+    this.saveRecipe(recipe);
   }
   render() {
     return (
