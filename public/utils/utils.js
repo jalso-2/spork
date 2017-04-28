@@ -2,13 +2,13 @@ import React, { Component } from 'react';
 
 const axios = require('axios');
 
-class Ingredient extends React.Component {
+class Ingredient extends Component {
   render() {
     return (<li>{this.props.item}</li>);
   }
 }
 
-class Recipes extends React.Component {
+class Recipes extends Component {
   render() {
     return (<li ref={c => this.title = c} name="title">
       <div>{this.props.item.name}</div>
@@ -45,5 +45,3 @@ module.exports.saveRecipe = saveRecipe;
 module.exports.sendSMS = sendSMS;
 module.exports.Ingredient = Ingredient;
 module.exports.Recipes = Recipes;
-
-
