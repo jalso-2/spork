@@ -1,17 +1,20 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { browserHistory } from 'react-router';
-import makeRoutes from './routes';
-import App from './containers/App/App';
-// import 'bootstrap/dist/css/bootstrap.css';
-// import './app.css';
+import { Router, Route, browserHistory } from 'react-router';
+import Callback from './views/Main/Callback/Callback';
+import { requireAuth } from './utils/AuthService';
+import Login from './views/Main/Login/Login';
+import Profile from './views/Main/Profile/Profile';
+import Home from './views/Main/Home/Home';
 
-const routes = makeRoutes();
+const App = () => (
+  <div className="container">
+    <Router history={browserHistory}>
+      <Route path="/" component={Home} />
+      <Route path="/profile" component={Profile} onEnter={requireAuth} />
+      <Route path="/callback" component={Callback} />
+    </Router>
+  </div>
+);
 
-const mountNode = document.querySelector('#app');
-ReactDOM.render(
-  <App 
-    history={browserHistory}
-    routes={routes}
-  />,
-mountNode);
+ReactDOM.render(<App />, document.getElementById('app'));
