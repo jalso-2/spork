@@ -24,7 +24,6 @@ export class Home extends React.Component {
     return (
       <div>
         <h2>Home</h2>
-        {console.log(profile)}
         <p>Welcome {profile.name}!</p>
         <Button onClick={this.logout.bind(this)}>Logout</Button>
       </div>
