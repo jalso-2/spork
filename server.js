@@ -9,6 +9,7 @@ const webpack = require('webpack');
 const config = require('./webpack.config.dev.js');
 const User = require('./models/userModel.js');
 const Recipe = require('./models/recipeModel.js');
+const Meal = require('./models/mealModel.js');
 const path = require('path');
 const jwt = require('express-jwt');
 const jwks = require('jwks-rsa');
@@ -135,7 +136,7 @@ app.get('/find_recipe/*', (req, res) => {
 });
 
 
-app.post('/save_recipe', authCheck, (req, res) => {
+app.post('/save_recipe', (req, res) => {
   const recipeName = req.body.recipe;
 
   const newRecipe = new Recipe({

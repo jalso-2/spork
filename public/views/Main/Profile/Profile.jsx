@@ -1,13 +1,18 @@
+/* global localStorage */
 import React, { Component } from 'react';
-import { updateIngredients,
-    saveRecipe,
-    sendSMS,
-    checkUser } from '../../../utils/utils';
+import {
+  updateIngredients,
+  saveRecipe,
+  sendSMS,
+  checkUser
+} from '../../../utils/utils';
 import Ingredient from '../PersonalFridge/PersonalFridge';
 import Recipes from '../MealMatcher/MealMatcher';
 import AuthService from '../../../utils/AuthService';
 import FriendList from '../FriendList/FriendList';
 import Events from '../Events/Events';
+import { ButtonToolbar, Button, Col } from 'react-bootstrap';
+
 
 const axios = require('axios');
 
@@ -20,6 +25,7 @@ export default class App extends Component {
       recipies: [],
       profile: props.auth.getProfile(),
     };
+
     props.auth.on('profile_updated', (newProfile) => {
       this.setState({ profile: newProfile });
     });
@@ -56,10 +62,12 @@ export default class App extends Component {
     const params = ingredients.replace(',', '/');
     axios.get(`/find_recipe/${params}`)
       .then((response) => {
-        const recipies = response.data.hits.map(recipe => ({ name: recipe.recipe.label,
+        const recipies = response.data.hits.map(recipe => ({
+          name: recipe.recipe.label,
           ingredients: recipe.recipe.ingredientLines,
           image: recipe.recipe.image,
-          url: recipe.recipe.uri }));
+          url: recipe.recipe.uri
+        }));
         this.setState({ recipies });
         this.render();
       });
@@ -70,10 +78,13 @@ export default class App extends Component {
 
   render() {
     return (
-      <div id="profile">
-        This is the profile page.
-        {console.log(this.state.profile)}
-        <div>
+      <div>
+        <Col md={3}>
+          <div>
+            <FriendList friendLi={this.props} />
+          </div>
+        </Col>
+        <Col md={6} lg={6}>
           <form>
             <input
               type="text"
@@ -83,37 +94,7 @@ export default class App extends Component {
             />
             <button type="button" onClick={this.onSubmit.bind(this)} >Save</button>
           </form>
-        </div>
-        <div>
-          <ul>
-            {this.state.ingredients
-              .map((item, key) => <Ingredient item={item} key={key} />)}
-          </ul>
-        </div>
-        <div>
-          <form>
-            <input
-              type="text"
-              ref={c => this.title = c}
-              name="title"
-              placeholder="Search For Recipies Here"
-            />
-            <button type="button" onClick={this.getRecipe.bind(this)}>Search Recipes</button>
-          </form>
-      <div>
-        <div id="profile">
-          This is the profile page.
-          <div>
-            <form>
-              <input
-                type="text"
-                ref={c => this.title = c}
-                name="title"
-                placeholder="Enter Your Ingredients Here"
-              />
-              <button type="button" onClick={this.onSubmit.bind(this)} >Save</button>
-            </form>
-          </div>
+          
           <div>
             <ul>
               {this.state.ingredients
@@ -140,15 +121,66 @@ export default class App extends Component {
           <div>
             <button type="button" onClick={sendSMS}>Let's Eat!</button>
           </div>
-        </div>
-        <div>
-          <FriendList friendLi={this.props} />
-        </div>
-        <div>
-          <Events eventLi={this.props} />
-        </div>
+        </Col>
+        <Col md={3} lg={3}>
+          <div>
+            <Events eventLi={this.props} />
+          </div>
+        </Col>
       </div>
     );
   }
 }
 
+      // <div id="profile">
+      //   <div>
+      //     This is the profile page.
+      //     <div>
+      //       <div class="container">
+      //         <div class="col-sm-4">
+      //           <div>
+      //             <FriendList friendLi={this.props} />
+      //           </div>
+      //         </div>
+      //         <form>
+      //           <input
+      //             type="text"
+      //             ref={c => this.title = c}
+      //             name="title"
+      //             placeholder="Enter Your Ingredients Here"
+      //           />
+      //           <button type="button" onClick={this.onSubmit.bind(this)} >Save</button>
+      //         </form>
+      //       </div>
+      //       <div>
+      //         <ul>
+      //           {this.state.ingredients
+      //             .map((item, key) => <Ingredient item={item} key={key} />)}
+      //         </ul>
+      //       </div>
+      //       <div>
+      //         <form>
+      //           <input
+      //             type="text"
+      //             ref={c => this.title = c}
+      //             name="title"
+      //             placeholder="Search For Recipies Here"
+      //           />
+      //           <button type="button" onClick={this.getRecipe.bind(this)}>Search Recipes</button>
+      //         </form>
+      //       </div>
+      //       <div>
+      //         <ul>
+      //           {this.state.recipies
+      //             .map((item, key) => <Recipes item={item} key={key} likeRecipe={this.likeRecipe} />)}
+      //         </ul>
+      //       </div>
+      //       <div>
+      //         <button type="button" onClick={sendSMS}>Let's Eat!</button>
+      //       </div>
+      //     </div>
+      //     <div>
+      //       <Events eventLi={this.props} />
+      //     </div>
+      //   </div>
+      // </div>
