@@ -24,24 +24,22 @@ export default class App extends Component {
       ingredients: [],
       recipies: [],
       profile: props.auth.getProfile(),
-      // userChecked: false,
     };
 
     props.auth.on('profile_updated', (newProfile) => {
       this.setState({ profile: newProfile });
     });
+    this.getMyIngredients();
   }
   componentWillMount() {
-    checkUser(JSON.parse(localStorage.profile), this.getMyIngredients.bind(this));
-    // this.setState({ userChecked: true });
-    // this.getMyIngredients();
+    checkUser(JSON.parse(localStorage.profile));
   }
   onSubmit(e) {
     e.preventDefault();
     const value = this.title.value;
     updateIngredients(value);
     this.resetInput();
-    // this.getMyIngredients();
+    this.getMyIngredients();
   }
   getMyIngredients() {
     const params = JSON.parse(localStorage.profile).nickname;
