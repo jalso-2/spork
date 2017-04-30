@@ -4,7 +4,6 @@ const userSchema = mongoose.Schema({
   username: {
     type: String,
     required: true,
-    unique: true,
   },
 
   password: {
@@ -22,7 +21,7 @@ const userSchema = mongoose.Schema({
 
   friendsList: Array,
 
-  likedRecipies: Array,
+  likedRecipes: Array,
 });
 
 const User = mongoose.model('User', userSchema);
