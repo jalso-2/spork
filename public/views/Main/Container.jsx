@@ -18,7 +18,6 @@ const Container = (props) => {
   );
 };
 
-
 export default Container;
 
 // export class Container extends React.Component {

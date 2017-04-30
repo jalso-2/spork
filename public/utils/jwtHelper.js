@@ -19,3 +19,4 @@ export function isTokenExpired(token) {
   }
   return !(date.valueOf() > new Date().valueOf());
 }
+

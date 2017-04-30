@@ -16,7 +16,6 @@ const requireAuth = (nextState, replace) => {
   }
 };
 
-
 export const makeMainRoutes = () => (
   <Route path="/" component={Container} auth={auth}>
     <IndexRedirect to="/home" />
