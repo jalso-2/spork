@@ -24,6 +24,7 @@ class Recipes extends Component {
   }
 }
 
+
 const updateIngredients = (ingredient) => {
   axios.post('/my_ingredients', { ingredient })
     .then(response => response);

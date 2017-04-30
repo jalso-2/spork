@@ -36,6 +36,7 @@ export default class AuthService extends EventEmitter {
     });
   }
 
+
   _authorizationError(error) {
     // Unexpected authentication error
     console.log('Authentication Error', error);

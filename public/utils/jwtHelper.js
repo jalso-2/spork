@@ -11,6 +11,7 @@ export function getTokenExpirationDate(token) {
   return date;
 }
 
+
 export function isTokenExpired(token) {
   const date = getTokenExpirationDate(token);
   if (date === null) {

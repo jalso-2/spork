@@ -48,9 +48,11 @@ export default class App extends Component {
         this.render();
       });
   }
+  
   likeRecipe(recipe) {
     this.saveRecipe(recipe);
   }
+
   render() {
     return (
       <div id="home">

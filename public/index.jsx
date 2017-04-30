@@ -6,6 +6,7 @@ import App from './containers/App/App';
 // import 'bootstrap/dist/css/bootstrap.css';
 // import './app.css';
 
+
 const routes = makeRoutes();
 
 const mountNode = document.querySelector('#app');
