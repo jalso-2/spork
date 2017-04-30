@@ -1,17 +1,17 @@
 /* global localStorage */
 import React, { Component } from 'react';
+import { ButtonToolbar, Button, Col } from 'react-bootstrap';
 import {
   updateIngredients,
   saveRecipe,
   sendSMS,
-  checkUser
+  checkUser,
 } from '../../../utils/utils';
 import Ingredient from '../PersonalFridge/PersonalFridge';
 import Recipes from '../MealMatcher/MealMatcher';
 import AuthService from '../../../utils/AuthService';
 import FriendList from '../FriendList/FriendList';
 import Events from '../Events/Events';
-import { ButtonToolbar, Button, Col } from 'react-bootstrap';
 
 
 const axios = require('axios');
@@ -29,6 +29,7 @@ export default class App extends Component {
     props.auth.on('profile_updated', (newProfile) => {
       this.setState({ profile: newProfile });
     });
+    
     this.getMyIngredients();
   }
   componentWillMount() {
@@ -66,7 +67,7 @@ export default class App extends Component {
           name: recipe.recipe.label,
           ingredients: recipe.recipe.ingredientLines,
           image: recipe.recipe.image,
-          url: recipe.recipe.uri
+          url: recipe.recipe.uri,
         }));
         this.setState({ recipies });
         this.render();
@@ -94,7 +95,7 @@ export default class App extends Component {
             />
             <button type="button" onClick={this.onSubmit.bind(this)} >Save</button>
           </form>
-          
+
           <div>
             <ul>
               {this.state.ingredients

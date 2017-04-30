@@ -231,11 +231,20 @@ app.post('/make_new_meal', (req, res) => {
   });
 });
 
-app.update('./update_meal', (req, res) => {
+app.put('./update_meal', (req, res) => {
   const options = { overwrite: true };
   Meal.updateOne({ _id: req.body.meal._id }, req.body.meal, options, (err, suc) => {
     if (!err) {
       return res.send(200, suc);
+    }
+    return res.send(500, err);
+  });
+});
+
+app.get('./meal_needs/*', (req, res) => {
+  Meal.find({ _id: req.params[0] }).then((err, suc) => {
+    if (!err) {
+      return res.send(200, suc.missingIngredients);
     }
     return res.send(500, err);
   });
