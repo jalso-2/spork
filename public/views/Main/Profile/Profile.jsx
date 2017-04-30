@@ -29,6 +29,7 @@ export default class App extends Component {
     props.auth.on('profile_updated', (newProfile) => {
       this.setState({ profile: newProfile });
     });
+    
     this.getMyIngredients();
   }
   componentWillMount() {

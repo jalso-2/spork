@@ -25,5 +25,4 @@ class NeedList extends Component {
   }
 };
 
-
 export default NeedList;

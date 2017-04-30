@@ -1,8 +1,8 @@
 const axios = require('axios');
 
 const updateIngredients = (ingredient) => {
-      axios.post('/my_ingredients', { ingredient })
-        .then(response => response);
+  axios.post('/my_ingredients', { ingredient })
+    .then(response => response);
 };
 
 const saveRecipe = (recipe) => {
@@ -15,9 +15,9 @@ const sendSMS = () => {
     .then(response => response);
 };
 
-const checkUser = (profile, callback) => {
+const checkUser = (profile) => {
   axios.post('/check_user', { profile })
-    .then(() => callback());
+    .then(response => response);
 };
 
 module.exports.updateIngredients = updateIngredients;
