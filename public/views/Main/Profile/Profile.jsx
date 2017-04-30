@@ -1,17 +1,17 @@
 /* global localStorage */
 import React, { Component } from 'react';
+import { ButtonToolbar, Button, Col } from 'react-bootstrap';
 import {
   updateIngredients,
   saveRecipe,
   sendSMS,
-  checkUser
+  checkUser,
 } from '../../../utils/utils';
 import Ingredient from '../PersonalFridge/PersonalFridge';
 import Recipes from '../MealMatcher/MealMatcher';
 import AuthService from '../../../utils/AuthService';
 import FriendList from '../FriendList/FriendList';
 import Events from '../Events/Events';
-import { ButtonToolbar, Button, Col } from 'react-bootstrap';
 
 
 const axios = require('axios');
@@ -24,22 +24,24 @@ export default class App extends Component {
       ingredients: [],
       recipies: [],
       profile: props.auth.getProfile(),
+      // userChecked: false,
     };
 
     props.auth.on('profile_updated', (newProfile) => {
       this.setState({ profile: newProfile });
     });
-    this.getMyIngredients();
   }
   componentWillMount() {
-    checkUser(JSON.parse(localStorage.profile));
+    checkUser(JSON.parse(localStorage.profile), this.getMyIngredients.bind(this));
+    // this.setState({ userChecked: true });
+    // this.getMyIngredients();
   }
   onSubmit(e) {
     e.preventDefault();
     const value = this.title.value;
     updateIngredients(value);
     this.resetInput();
-    this.getMyIngredients();
+    // this.getMyIngredients();
   }
   getMyIngredients() {
     const params = JSON.parse(localStorage.profile).nickname;
@@ -66,7 +68,7 @@ export default class App extends Component {
           name: recipe.recipe.label,
           ingredients: recipe.recipe.ingredientLines,
           image: recipe.recipe.image,
-          url: recipe.recipe.uri
+          url: recipe.recipe.uri,
         }));
         this.setState({ recipies });
         this.render();
@@ -94,7 +96,7 @@ export default class App extends Component {
             />
             <button type="button" onClick={this.onSubmit.bind(this)} >Save</button>
           </form>
-          
+
           <div>
             <ul>
               {this.state.ingredients

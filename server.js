@@ -231,7 +231,7 @@ app.post('/make_new_meal', (req, res) => {
   });
 });
 
-app.update('./update_meal', (req, res) => {
+app.put('./update_meal', (req, res) => {
   const options = { overwrite: true };
   Meal.updateOne({ _id: req.body.meal._id }, req.body.meal, options, (err, suc) => {
     if (!err) {

@@ -15,9 +15,9 @@ const sendSMS = () => {
     .then(response => response);
 };
 
-const checkUser = (profile) => {
+const checkUser = (profile, callback) => {
   axios.post('/check_user', { profile })
-    .then(response => response);
+    .then(() => callback());
 };
 
 module.exports.updateIngredients = updateIngredients;
