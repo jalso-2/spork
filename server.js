@@ -241,4 +241,13 @@ app.put('./update_meal', (req, res) => {
   });
 });
 
+app.get('./meal_needs/*', (req, res) => {
+  Meal.find({ _id: req.params[0] }).then((err, suc) => {
+    if (!err) {
+      return res.send(200, suc.missingIngredients);
+    }
+    return res.send(500, err);
+  });
+});
+
 app.get('*', (req, res) => res.sendFile(path.resolve(__dirname, 'index.html')));
