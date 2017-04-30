@@ -16,7 +16,7 @@ export class Home extends React.Component {
 
   logout() {
     this.props.auth.logout();
-    this.context.router.push('/login');
+    this.props.router.push('/login');
   }
 
   render() {
