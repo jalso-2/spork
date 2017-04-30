@@ -6,7 +6,8 @@ import { updateIngredients,
 import Ingredient from '../PersonalFridge/PersonalFridge';
 import Recipes from '../MealMatcher/MealMatcher';
 import AuthService from '../../../utils/AuthService';
-
+import FriendList from '../FriendList/FriendList';
+import Events from '../Events/Events';
 
 const axios = require('axios');
 
@@ -19,13 +20,13 @@ export default class App extends Component {
       recipies: [],
       profile: props.auth.getProfile(),
     };
-  componentWillMount() {
-    checkUser(JSON.parse(localStorage.profile));
-  }
     props.auth.on('profile_updated', (newProfile) => {
       this.setState({ profile: newProfile });
     });
     this.getMyIngredients();
+  }
+  componentWillMount() {
+    checkUser(JSON.parse(localStorage.profile));
   }
   onSubmit(e) {
     e.preventDefault();
@@ -63,7 +64,6 @@ export default class App extends Component {
         this.render();
       });
   }
-
   likeRecipe(recipe) {
     saveRecipe(recipe);
   }
@@ -100,19 +100,55 @@ export default class App extends Component {
             />
             <button type="button" onClick={this.getRecipe.bind(this)}>Search Recipes</button>
           </form>
+      <div>
+        <div id="profile">
+          This is the profile page.
+          <div>
+            <form>
+              <input
+                type="text"
+                ref={c => this.title = c}
+                name="title"
+                placeholder="Enter Your Ingredients Here"
+              />
+              <button type="button" onClick={this.onSubmit.bind(this)} >Save</button>
+            </form>
+          </div>
+          <div>
+            <ul>
+              {this.state.ingredients
+                .map((item, key) => <Ingredient item={item} key={key} />)}
+            </ul>
+          </div>
+          <div>
+            <form>
+              <input
+                type="text"
+                ref={c => this.title = c}
+                name="title"
+                placeholder="Search For Recipies Here"
+              />
+              <button type="button" onClick={this.getRecipe.bind(this)}>Search Recipes</button>
+            </form>
+          </div>
+          <div>
+            <ul>
+              {this.state.recipies
+                .map((item, key) => <Recipes item={item} key={key} likeRecipe={this.likeRecipe} />)}
+            </ul>
+          </div>
+          <div>
+            <button type="button" onClick={sendSMS}>Let's Eat!</button>
+          </div>
         </div>
         <div>
-          <ul>
-            {this.state.recipies
-              .map((item, key) => <Recipes item={item} key={key} likeRecipe={this.likeRecipe} />)}
-          </ul>
+          <FriendList friendLi={this.props} />
         </div>
         <div>
-          <button type="button" onClick={sendSMS}>Let's Eat!</button>
+          <Events eventLi={this.props} />
         </div>
       </div>
     );
   }
 }
 
-export default Login;
