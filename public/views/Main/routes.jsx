@@ -7,8 +7,8 @@ import Profile from './Profile/Profile';
 
 // import Env from '../../../.env';
 
-
 // validate authentication for private routes
+
 const requireAuth = (nextState, replace) => {
   if (!auth.loggedIn()) {
     replace({ pathname: '/login' });

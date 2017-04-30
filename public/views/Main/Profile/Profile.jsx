@@ -1,4 +1,8 @@
 /* global localStorage */
+<<<<<<< HEAD
+=======
+
+>>>>>>> (prog) Add normal user signup
 import React, { Component } from 'react';
 import { ButtonToolbar, Button, Col } from 'react-bootstrap';
 import {
@@ -40,7 +44,6 @@ export default class App extends Component {
   }
   getMyIngredients() {
     const params = JSON.parse(localStorage.profile).nickname;
-
     axios.get(`/my_ingredients/${params}`)
       .then((response) => {
         this.setState({ ingredients: response.data });
