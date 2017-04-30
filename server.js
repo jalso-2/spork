@@ -10,6 +10,9 @@ const config = require('./webpack.config.dev.js');
 const User = require('./models/userModel.js');
 const Recipe = require('./models/recipeModel.js');
 const path = require('path');
+const jwt = require('express-jwt');
+const jwks = require('jwks-rsa');
+const cors = require('cors');
 
 const compiler = webpack(config);
 
@@ -45,12 +48,28 @@ conn.once('open', (err) => {
 app.use('/public', express.static('public'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(cors());
 app.use(require('webpack-dev-middleware')(compiler, {
   noInfo: true,
   publicPath: config.output.publicPath,
 }));
 app.use(require('webpack-hot-middleware')(compiler));
 /* ***********End MiddleWare************** */
+
+const authCheck = jwt({
+  secret: jwks.expressJwtSecret({
+    cache: true,
+    rateLimit: true,
+    jwksRequestsPerMinute: 5,
+    // YOUR-AUTH0-DOMAIN name e.g prosper.auth0.com
+    jwksUri: process.env.AUTH0_JWKS_URI,
+  }),
+    // This is the identifier we set when we created the API
+  audience: process.env.AUTH0_AUDIENCE,
+  issuer: process.env.AUTH0_ISSUER,
+  algorithms: ['RS256'],
+});
+
 
 app.post('/test_user', (req, res) => {
   const username = req.body.username;
@@ -71,7 +90,7 @@ app.post('/test_user', (req, res) => {
 });
 
 
-app.post('/my_ingredients', (req, res) => {
+app.post('/my_ingredients', authCheck, (req, res) => {
   const id = testIdKey;
   const ingredient = req.body.ingredient;
 
@@ -84,7 +103,7 @@ app.post('/my_ingredients', (req, res) => {
   });
 });
 
-app.get('/my_ingredients', (req, res) => {
+app.get('/my_ingredients', authCheck, (req, res) => {
   const id = testIdKey;
 
   User.find({ _id: id }, 'currentListOfIngredients', (err, data) => {
@@ -96,7 +115,7 @@ app.get('/my_ingredients', (req, res) => {
   });
 });
 
-app.get('/find_recipe/*', (req, res) => {
+app.get('/find_recipe/*', authCheck, (req, res) => {
   const query = req.params[0].replace('/', '%20');
 
   axios.get(`http://api.edamam.com/search?q=${query}`, {
@@ -111,7 +130,7 @@ app.get('/find_recipe/*', (req, res) => {
     });
 });
 
-app.post('/save_recipe', (req, res) => {
+app.post('/save_recipe', authCheck, (req, res) => {
   const recipeName = req.body.recipe;
   const id = testIdKey;
 
@@ -160,7 +179,7 @@ app.post('/save_recipe', (req, res) => {
   });
 });
 
-app.get('/lets_eat', (req, res) => {
+app.get('/lets_eat', authCheck, (req, res) => {
   client.messages.create({
     to: `+${testNumber}`,
     from: `+${twilioNumber}`,

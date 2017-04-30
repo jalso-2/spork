@@ -32,4 +32,14 @@ export class Home extends React.Component {
   }
 }
 
+import Nav from '../Nav/Nav';
+
+const Home = () => (
+  <div>
+    <Nav />
+    <h2>Got this one!</h2>
+  </div>
+);
+
+
 export default Home;
