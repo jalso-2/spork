@@ -20,6 +20,7 @@ export default class AuthService extends EventEmitter {
     // binds login functions to keep this context
     this.login = this.login.bind(this);
   }
+  
 
   _doAuthentication(authResult) {
     // Saves the user token
@@ -35,6 +36,7 @@ export default class AuthService extends EventEmitter {
       }
     });
   }
+
 
   _authorizationError(error) {
     // Unexpected authentication error
