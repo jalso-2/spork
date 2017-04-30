@@ -1,14 +1,8 @@
 const axios = require('axios');
 
 const updateIngredients = (ingredient) => {
-  const checkIngredient = ingredient;
-
-  checkIngredient.split('').map((char) => {
-    if (char !== '') {
       axios.post('/my_ingredients', { ingredient })
         .then(response => response);
-    }
-  });
 };
 
 const saveRecipe = (recipe) => {
