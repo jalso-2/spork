@@ -14,6 +14,7 @@ class FriendList extends Component {
 
   render() {
     const friendList = [{ username: 'mike' }, { username: 'mikey' }, { username: 'mikeal' }];
+    console.log("FRIENDLIST", friendList, "PROPS", this.props);
     return (
       <div>
        {friendList.map(friend => <Friend clickHandler={this.clickHandler} username={friend.username} key={friend.username} />)}

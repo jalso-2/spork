@@ -17,6 +17,8 @@ const userSchema = mongoose.Schema({
   friendsList: Array,
 
   likedRecipes: Array,
+
+  meals: Array,
 });
 
 const User = mongoose.model('User', userSchema);
