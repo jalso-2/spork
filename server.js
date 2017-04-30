@@ -18,7 +18,6 @@ const compiler = webpack(config);
 
 const PORT = process.env.PORT || 3000;
 const MONGOURI = process.env.MONGOURI;
-const testIdKey = process.env.DBTESTID;
 const key = process.env.EDAMAMKEY;
 const accountSid = process.env.TWILIO_AUTH_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
@@ -33,6 +32,7 @@ mongoose.connect(MONGOURI);
 
 const app = express();
 
+let currentUser;
 
 conn.on('error', console.error.bind(console, 'connection error:'));
 
@@ -70,43 +70,48 @@ const authCheck = jwt({
   algorithms: ['RS256'],
 });
 
+app.post('/check_user', (req, res) => {
+  const username = req.body.profile.nickname;
+  const phoneNumber = req.body.profile.phoneNumber;
+  const email = req.body.profile.email;
+  const image = req.body.profile.picture;
+  currentUser = username;
 
-app.post('/test_user', (req, res) => {
-  const username = req.body.username;
-  const password = req.body.password;
+  const user = new User({ username, phoneNumber, email, image });
 
-  const phoneNumber = req.body.phoneNumber;
-  const email = req.body.email;
-  const user = new User({ username, password, phoneNumber, email });
-
-  user.save((err) => {
+  User.findOne({ username }, (err) => {
     if (err) {
       console.error(err, 'Error');
     } else {
-      console.log('saved to database');
-      res.send('Hello form the other side');
+      user.save((error, person) => {
+        if (error) {
+          console.error(error, 'Error');
+        } else {
+          res.send(person);
+        }
+      });
     }
   });
 });
 
-
-app.post('/my_ingredients', authCheck, (req, res) => {
-  const id = testIdKey;
+app.post('/my_ingredients', (req, res) => {
   const ingredient = req.body.ingredient;
 
-  User.updateOne({ _id: id }, { $push: { currentListOfIngredients: ingredient } }, (err, data) => {
-    if (err) {
-      console.error(err, 'Error');
-    } else {
-      res.send('Hello Moto!');
-    }
-  });
+  User.updateOne({ username: currentUser },
+    { $push: { currentListOfIngredients: ingredient } }, (err, data) => {
+      if (err) {
+        console.error(err, 'Error');
+      } else {
+        res.send(data);
+      }
+    });
 });
 
-app.get('/my_ingredients', authCheck, (req, res) => {
-  const id = testIdKey;
 
-  User.find({ _id: id }, 'currentListOfIngredients', (err, data) => {
+app.get('/my_ingredients/*', (req, res) => {
+  currentUser = req.params[0];
+
+  User.find({ username: currentUser }, 'currentListOfIngredients', (err, data) => {
     if (err) {
       console.error(err, 'Error');
     } else {
@@ -115,25 +120,23 @@ app.get('/my_ingredients', authCheck, (req, res) => {
   });
 });
 
-app.get('/find_recipe/*', authCheck, (req, res) => {
+app.get('/find_recipe/*', (req, res) => {
   const query = req.params[0].replace('/', '%20');
 
   axios.get(`http://api.edamam.com/search?q=${query}`, {
     headers: { key },
   })
     .then((resp) => {
-      console.log(resp.data, 'DATAAAAA!!!!!!!');
       res.send(resp.data);
     })
     .catch((err) => {
-      console.log(err);
+      console.error(err);
     });
 });
 
 
-app.post('/save_recipe', (req, res) => {
+app.post('/save_recipe', authCheck, (req, res) => {
   const recipeName = req.body.recipe;
-  const id = testIdKey;
 
   const newRecipe = new Recipe({
     recipeName: recipeName.name,
@@ -141,46 +144,44 @@ app.post('/save_recipe', (req, res) => {
     ingredients: recipeName.ingredients,
     url: recipeName.url });
 
-  Recipe.find({ recipeName: recipeName.name }, (err, data) => {
+  Recipe.find({ recipeName: recipeName.name }, (err) => {
     if (err) {
       console.error(err, 'Error!');
     } else {
-      console.log(data, 'newRecipe');
       newRecipe.save((error, result) => {
         if (error) {
           console.error(error, 'Error on save');
-          Recipe.updateOne({ recipeName: recipeName.name }, { $push: { likedBy: id } }, (prob, success) => {
-            if (err) {
-              console.error(prob, 'Error');
-            } else {
-              console.log(success, 'updated');
-              res.send('in there like swimwear!!!');
-            }
-          });
+          Recipe.updateOne({ recipeName: recipeName.name },
+            { $push: { likedBy: currentUser } }, (prob, success) => {
+              if (err) {
+                console.error(prob, 'Error');
+              } else {
+                res.send(success);
+              }
+            });
         } else {
-          console.log(result, 'result');
-          User.updateOne({ _id: id }, { $push: { likedRecipes: result._id } }, (problem, updated) => {
-            if (err) {
-              console.error(problem, 'Error');
-            } else {
-              console.log(updated, 'updated');
-              Recipe.updateOne({ _id: result._id }, { $push: { likedBy: id } }, (prob, success) => {
-                if (err) {
-                  console.error(prob, 'Error');
-                } else {
-                  console.log(success, 'updated');
-                  res.send('in there like swimwear!!!');
-                }
-              });
-            }
-          });
+          User.updateOne({ username: currentUser },
+            { $push: { likedRecipes: result.recipeName } }, (problem) => {
+              if (err) {
+                console.error(problem, 'Error');
+              } else {
+                Recipe.updateOne({ _id: result._id },
+                { $push: { likedBy: currentUser } }, (prob, success) => {
+                  if (err) {
+                    console.error(prob, 'Error');
+                  } else {
+                    res.send(success);
+                  }
+                });
+              }
+            });
         }
       });
     }
   });
 });
 
-app.get('/lets_eat', authCheck, (req, res) => {
+app.get('/lets_eat', (req, res) => {
   client.messages.create({
     to: `+${testNumber}`,
     from: `+${twilioNumber}`,
@@ -190,8 +191,7 @@ app.get('/lets_eat', authCheck, (req, res) => {
     if (err) {
       console.error(err, 'Error');
     } else {
-      console.log(message);
-      res.send('howdy do');
+      res.send(message);
     }
   });
 });

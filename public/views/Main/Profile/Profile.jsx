@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
-import { Ingredient,
-    Recipes,
-    updateIngredients,
+import { updateIngredients,
     saveRecipe,
-    sendSMS } from '../../../utils/utils';
+    sendSMS,
+    checkUser } from '../../../utils/utils';
+import Ingredient from '../PersonalFridge/PersonalFridge';
+import Recipes from '../MealMatcher/MealMatcher';
+import AuthService from '../../../utils/AuthService';
+
 
 const axios = require('axios');
 
@@ -14,7 +17,14 @@ export default class App extends Component {
       done: false,
       ingredients: [],
       recipies: [],
+      profile: props.auth.getProfile(),
     };
+  componentWillMount() {
+    checkUser(JSON.parse(localStorage.profile));
+  }
+    props.auth.on('profile_updated', (newProfile) => {
+      this.setState({ profile: newProfile });
+    });
     this.getMyIngredients();
   }
   onSubmit(e) {
@@ -25,8 +35,13 @@ export default class App extends Component {
     this.getMyIngredients();
   }
   getMyIngredients() {
-    axios.get('/my_ingredients')
-      .then(response => this.setState({ ingredients: response.data }));
+    const params = JSON.parse(localStorage.profile).nickname;
+
+    axios.get(`/my_ingredients/${params}`)
+      .then((response) => {
+        this.setState({ ingredients: response.data });
+        this.render();
+      });
   }
   getRecipe(e) {
     e.preventDefault();
@@ -48,15 +63,16 @@ export default class App extends Component {
         this.render();
       });
   }
-  
+
   likeRecipe(recipe) {
-    this.saveRecipe(recipe);
+    saveRecipe(recipe);
   }
 
   render() {
     return (
-      <div id="home">
+      <div id="profile">
         This is the profile page.
+        {console.log(this.state.profile)}
         <div>
           <form>
             <input
@@ -99,3 +115,4 @@ export default class App extends Component {
   }
 }
 
+export default Login;
