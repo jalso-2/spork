@@ -197,4 +197,48 @@ app.get('/lets_eat', (req, res) => {
   });
 });
 
+app.get('/my_meals/*', (req, res) => {
+  User.find({ _id: req.params[0] }).then((err, suc) => {
+    console.log('success or failure');
+    if (!err) {
+      return res.send(200, suc);
+    }
+    return res.send(500, err);
+  });
+});
+
+app.post('/make_new_meal', (req, res) => {
+  console.log(req.body.data);
+  const host = req.body.data.meal.host;
+  const teamFridge = req.body.data.meal.teamFridge;
+  const location = req.body.data.meal.location;
+  const time = req.body.data.meal.time;
+  const meal = new Meal({
+    host,
+    teamFridge,
+    location,
+    time,
+    people: [],
+    ingredients: [],
+    missingIngredients: [],
+    tenMatches: [],
+    topThree: [],
+  }).save().then((err, suc) => {
+    if (!err) {
+      return res.send(200, suc);
+    }
+    return res.send(500, err);
+  });
+});
+
+app.update('./update_meal', (req, res) => {
+  const options = { overwrite: true };
+  Meal.updateOne({ _id: req.body.meal._id }, req.body.meal, options, (err, suc) => {
+    if (!err) {
+      return res.send(200, suc);
+    }
+    return res.send(500, err);
+  });
+});
+
 app.get('*', (req, res) => res.sendFile(path.resolve(__dirname, 'index.html')));
