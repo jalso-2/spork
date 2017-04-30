@@ -2,8 +2,25 @@ import decode from 'jwt-decode';
 import { browserHistory } from 'react-router';
 import auth0 from 'auth0-js';
 
-const ID_TOKEN_KEY = 'id_token';
-const ACCESS_TOKEN_KEY = 'access_token';
+// <<<<<<< auth0logout
+//   _doAuthentication(authResult) {
+//     // Saves the user token
+//     this.setToken(authResult.idToken);
+//     // navigate to the home route
+//     browserHistory.replace('/profile');
+//     // Async loads the user profile data
+//     this.lock.getProfile(authResult.idToken, (error, profile) => {
+//       if (error) {
+//         console.log('Error loading the Profile', error);
+//       } else {
+//         this.setProfile(profile);
+//       }
+//     });
+//   }
+// =======
+// const ID_TOKEN_KEY = 'id_token';
+// const ACCESS_TOKEN_KEY = 'access_token';
+// >>>>>>> master
 
 const CLIENT_ID = process.env.AUTH0_CLIENT_ID;
 const CLIENT_DOMAIN = process.env.AUTH0_CLIENT_DOMAIN;
