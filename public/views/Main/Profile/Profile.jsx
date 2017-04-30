@@ -25,16 +25,12 @@ export default class App extends Component {
       recipies: [],
       profile: props.auth.getProfile(),
     };
-
     props.auth.on('profile_updated', (newProfile) => {
       this.setState({ profile: newProfile });
+      checkUser(JSON.parse(localStorage.profile), this.getMyIngredients.bind(this));
     });
-    
-    this.getMyIngredients();
   }
-  componentWillMount() {
-    checkUser(JSON.parse(localStorage.profile));
-  }
+
   onSubmit(e) {
     e.preventDefault();
     const value = this.title.value;
@@ -132,56 +128,3 @@ export default class App extends Component {
     );
   }
 }
-
-      // <div id="profile">
-      //   <div>
-      //     This is the profile page.
-      //     <div>
-      //       <div class="container">
-      //         <div class="col-sm-4">
-      //           <div>
-      //             <FriendList friendLi={this.props} />
-      //           </div>
-      //         </div>
-      //         <form>
-      //           <input
-      //             type="text"
-      //             ref={c => this.title = c}
-      //             name="title"
-      //             placeholder="Enter Your Ingredients Here"
-      //           />
-      //           <button type="button" onClick={this.onSubmit.bind(this)} >Save</button>
-      //         </form>
-      //       </div>
-      //       <div>
-      //         <ul>
-      //           {this.state.ingredients
-      //             .map((item, key) => <Ingredient item={item} key={key} />)}
-      //         </ul>
-      //       </div>
-      //       <div>
-      //         <form>
-      //           <input
-      //             type="text"
-      //             ref={c => this.title = c}
-      //             name="title"
-      //             placeholder="Search For Recipies Here"
-      //           />
-      //           <button type="button" onClick={this.getRecipe.bind(this)}>Search Recipes</button>
-      //         </form>
-      //       </div>
-      //       <div>
-      //         <ul>
-      //           {this.state.recipies
-      //             .map((item, key) => <Recipes item={item} key={key} likeRecipe={this.likeRecipe} />)}
-      //         </ul>
-      //       </div>
-      //       <div>
-      //         <button type="button" onClick={sendSMS}>Let's Eat!</button>
-      //       </div>
-      //     </div>
-      //     <div>
-      //       <Events eventLi={this.props} />
-      //     </div>
-      //   </div>
-      // </div>

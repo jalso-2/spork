@@ -7,7 +7,6 @@ import Profile from './Profile/Profile';
 
 // import Env from '../../../.env';
 
-const auth = new AuthService('AUTH0_CLIENT_ID', 'AUTH0_DOMAIN'); // Fill these in from .env
 
 // validate authentication for private routes
 const requireAuth = (nextState, replace) => {
@@ -18,7 +17,7 @@ const requireAuth = (nextState, replace) => {
 
 export const makeMainRoutes = () => (
   <Route path="/" component={Container} auth={auth}>
-    <IndexRedirect to="/home" />
+    <IndexRedirect to="/login" />
     <Route path="profile" component={Profile} onEnter={requireAuth} />
     <Route path="login" component={Login} />
   </Route>
