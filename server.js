@@ -130,7 +130,8 @@ app.get('/find_recipe/*', authCheck, (req, res) => {
     });
 });
 
-app.post('/save_recipe', authCheck, (req, res) => {
+
+app.post('/save_recipe', (req, res) => {
   const recipeName = req.body.recipe;
   const id = testIdKey;
 

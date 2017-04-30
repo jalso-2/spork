@@ -1,115 +1,85 @@
-import decode from 'jwt-decode';
+import { EventEmitter } from 'events';
+import Auth0Lock from 'auth0-lock';
 import { browserHistory } from 'react-router';
-import auth0 from 'auth0-js';
+import { isTokenExpired } from './jwtHelper';
 
-// <<<<<<< auth0logout
-//   _doAuthentication(authResult) {
-//     // Saves the user token
-//     this.setToken(authResult.idToken);
-//     // navigate to the home route
-//     browserHistory.replace('/profile');
-//     // Async loads the user profile data
-//     this.lock.getProfile(authResult.idToken, (error, profile) => {
-//       if (error) {
-//         console.log('Error loading the Profile', error);
-//       } else {
-//         this.setProfile(profile);
-//       }
-//     });
-//   }
-// =======
-// const ID_TOKEN_KEY = 'id_token';
-// const ACCESS_TOKEN_KEY = 'access_token';
-// >>>>>>> master
-
-const CLIENT_ID = process.env.AUTH0_CLIENT_ID;
-const CLIENT_DOMAIN = process.env.AUTH0_CLIENT_DOMAIN;
-const REDIRECT = process.env.AUTH0_REDIRECT;
-const SCOPE = 'openid';
-const AUDIENCE = process.env.AUTH0_AUDIENCE;
-
-const auth = new auth0.WebAuth({
-  clientID: CLIENT_ID,
-  domain: CLIENT_DOMAIN,
-});
-
-const getTokenExpirationDate = (encodedToken) => {
-  const token = decode(encodedToken);
-  if (!token.exp) {
-    return null;
+export default class AuthService extends EventEmitter {
+  constructor(clientId, domain) {
+    super();
+    // Configure Auth0
+    this.lock = new Auth0Lock(clientId, domain, {
+      auth: {
+        redirectUrl: `${window.location.origin}/login`,
+        responseType: 'token',
+      },
+    });
+    // Add callback for lock `authenticated` event
+    this.lock.on('authenticated', this._doAuthentication.bind(this));
+    // Add callback for lock `authorization_error` event
+    this.lock.on('authorization_error', this._authorizationError.bind(this));
+    // binds login functions to keep this context
+    this.login = this.login.bind(this);
   }
-  const date = new Date(0);
-  date.setUTCSeconds(token.exp);
-  return date;
-};
+  
 
-const isTokenExpired = (token) => {
-  const expirationDate = getTokenExpirationDate(token);
-  return expirationDate < new Date();
-};
+  _doAuthentication(authResult) {
+    // Saves the user token
+    this.setToken(authResult.idToken);
+    // navigate to the home route
+    browserHistory.replace('/home');
+    // Async loads the user profile data
+    this.lock.getProfile(authResult.idToken, (error, profile) => {
+      if (error) {
+        console.log('Error loading the Profile', error);
+      } else {
+        this.setProfile(profile);
+      }
+    });
+  }
 
-const clearIdToken = () => {
-  localStorage.removeItem(ID_TOKEN_KEY);
-};
 
-function clearAccessToken() {
-  localStorage.removeItem(ACCESS_TOKEN_KEY);
+  _authorizationError(error) {
+    // Unexpected authentication error
+    console.log('Authentication Error', error);
+  }
+
+  login() {
+    // Call the show method to display the widget.
+    this.lock.show();
+  }
+
+  loggedIn() {
+    // Checks if there is a saved token and it's still valid
+    const token = this.getToken();
+    return !!token && !isTokenExpired(token);
+  }
+
+  setProfile(profile) {
+    // Saves profile data to localStorage
+    localStorage.setItem('profile', JSON.stringify(profile));
+    // Triggers profile_updated event to update the UI
+    this.emit('profile_updated', profile);
+  }
+
+  getProfile() {
+    // Retrieves the profile data from localStorage
+    const profile = localStorage.getItem('profile');
+    return profile ? JSON.parse(localStorage.profile) : {};
+  }
+
+  setToken(idToken) {
+    // Saves user token to localStorage
+    localStorage.setItem('id_token', idToken);
+  }
+
+  getToken() {
+    // Retrieves the user token from localStorage
+    return localStorage.getItem('id_token');
+  }
+
+  logout() {
+    // Clear user token and profile data from localStorage
+    localStorage.removeItem('id_token');
+    localStorage.removeItem('profile');
+  }
 }
-
-// Helper function that will allow us to extract the access_token and id_token
-const getParameterByName = (name) => {
-  const match = RegExp('[#&]' + name + '=([^&]*)').exec(window.location.hash);
-  return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
-};
-
-const login = () => {
-  auth.authorize({
-    responseType: 'token id_token',
-    redirectUri: REDIRECT,
-    audience: AUDIENCE,
-    scope: SCOPE,
-  });
-};
-
-const logout = () => {
-  clearIdToken();
-  clearAccessToken();
-  browserHistory.push('/');
-};
-
-const getIdToken = () => localStorage.getItem(ID_TOKEN_KEY);
-
-const getAccessToken = () => localStorage.getItem(ACCESS_TOKEN_KEY);
-
-const isLoggedIn = () => {
-  const idToken = getIdToken();
-  return !!idToken && !isTokenExpired(idToken);
-};
-
-const requireAuth = (nextState, replace) => {
-  if (!isLoggedIn()) {
-    replace({ pathname: '/' });
-  }
-};
-
-
-// Get and store access_token in local storage
-const setAccessToken = () => {
-  const accessToken = getParameterByName('access_token');
-  localStorage.setItem(ACCESS_TOKEN_KEY, accessToken);
-};
-
-// Get and store id_token in local storage
-const setIdToken = () => {
-  const idToken = getParameterByName('id_token');
-  localStorage.setItem(ID_TOKEN_KEY, idToken);
-};
-
-module.exports.login = login;
-module.exports.logout = logout;
-module.exports.requireAuth = requireAuth;
-module.exports.getIdToken = getIdToken;
-module.exports.getAccessToken = getAccessToken;
-module.exports.setAccessToken = setAccessToken;
-module.exports.setIdToken = setIdToken;
-module.exports.isLoggedIn = isLoggedIn;
