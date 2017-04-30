@@ -1,8 +1,4 @@
 /* global localStorage */
-<<<<<<< HEAD
-=======
-
->>>>>>> (prog) Add normal user signup
 import React, { Component } from 'react';
 import { ButtonToolbar, Button, Col } from 'react-bootstrap';
 import {
