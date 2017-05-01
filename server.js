@@ -65,7 +65,7 @@ const authCheck = jwt({
     // YOUR-AUTH0-DOMAIN name e.g prosper.auth0.com
     jwksUri: process.env.AUTH0_JWKS_URI,
   }),
-    // This is the identifier we set when we created the API
+  // This is the identifier we set when we created the API
   audience: process.env.AUTH0_AUDIENCE,
   issuer: process.env.AUTH0_ISSUER,
   algorithms: ['RS256'],
@@ -143,7 +143,8 @@ app.post('/save_recipe', (req, res) => {
     recipeName: recipeName.name,
     image: recipeName.image,
     ingredients: recipeName.ingredients,
-    url: recipeName.url });
+    url: recipeName.url
+  });
 
   Recipe.find({ recipeName: recipeName.name }, (err) => {
     if (err) {
@@ -167,13 +168,13 @@ app.post('/save_recipe', (req, res) => {
                 console.error(problem, 'Error');
               } else {
                 Recipe.updateOne({ _id: result._id },
-                { $push: { likedBy: currentUser } }, (prob, success) => {
-                  if (err) {
-                    console.error(prob, 'Error');
-                  } else {
-                    res.send(success);
-                  }
-                });
+                  { $push: { likedBy: currentUser } }, (prob, success) => {
+                    if (err) {
+                      console.error(prob, 'Error');
+                    } else {
+                      res.send(success);
+                    }
+                  });
               }
             });
         }
@@ -231,7 +232,7 @@ app.post('/make_new_meal', (req, res) => {
   });
 });
 
-app.put('./update_meal', (req, res) => {
+app.put('/update_meal', (req, res) => {
   const options = { overwrite: true };
   Meal.updateOne({ _id: req.body.meal._id }, req.body.meal, options, (err, suc) => {
     if (!err) {
@@ -241,7 +242,7 @@ app.put('./update_meal', (req, res) => {
   });
 });
 
-app.get('./meal_needs/*', (req, res) => {
+app.get('/meal_needs/*', (req, res) => {
   Meal.find({ _id: req.params[0] }).then((err, suc) => {
     if (!err) {
       return res.send(200, suc.missingIngredients);
@@ -250,4 +251,13 @@ app.get('./meal_needs/*', (req, res) => {
   });
 });
 
+app.get('/fav_recipes/*', (req, res) => {
+  User.find({ email: req.params[0] }, 'likedRecipes', (err, data) => {
+    if (err) {
+      console.error(err);
+    } else {
+      res.send(data[0].likedRecipes);
+    }
+  });
+});
 app.get('*', (req, res) => res.sendFile(path.resolve(__dirname, 'index.html')));

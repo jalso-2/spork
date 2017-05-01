@@ -11,7 +11,7 @@ const Container = (props) => {
   return (
     <Jumbotron>
       <h2 >
-        <img src="https://cdn.auth0.com/styleguide/1.0.0/img/badge.svg" />
+        <img src="./public/assets/sporkText.png" />
       </h2>
       {children}
     </Jumbotron>

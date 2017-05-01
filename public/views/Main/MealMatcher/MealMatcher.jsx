@@ -10,7 +10,7 @@ export default class Recipes extends Component {
       <button
         type="button"
         onClick={this.props.likeRecipe.bind(this, this.props.item)}
-      >Like</button>
+      >Spork It!</button>
     </li>
     );
   }

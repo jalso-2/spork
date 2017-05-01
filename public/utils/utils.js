@@ -20,7 +20,12 @@ const checkUser = (profile, cb) => {
     .then(() => cb());
 };
 
+const myFavorites = (person) => {
+  console.log("MYFAVORITES");
+};
+
 module.exports.updateIngredients = updateIngredients;
 module.exports.saveRecipe = saveRecipe;
 module.exports.sendSMS = sendSMS;
 module.exports.checkUser = checkUser;
+module.exports.myFavorites = myFavorites;
