@@ -30,8 +30,9 @@ export default class App extends Component {
     };
     props.auth.on('profile_updated', (newProfile) => {
       this.setState({ profile: newProfile });
-      checkUser(JSON.parse(localStorage.profile), this.getMyIngredients.bind(this));
+      checkUser(JSON.parse(localStorage.profile), this.getMyIngredients());
     });
+    this.onClick = this.onClick.bind(this);
   }
 
   onSubmit(e) {
@@ -72,7 +73,14 @@ export default class App extends Component {
   likeRecipe(recipe) {
     saveRecipe(recipe);
   }
-
+  onClick(e) {
+    const params = e.target.name;
+    axios.delete(`/delete_ingredient/${params}`)
+      .then((response) => {
+        this.setState({ ingredients: response.data });
+        this.render();
+      });
+  }
   render() {
     return (
       <div>
@@ -95,7 +103,7 @@ export default class App extends Component {
             </form>
           </div>
           <div>
-            <PersonalFridge ingredients={this.state.ingredients} />
+            <PersonalFridge ingredients={this.state.ingredients} onClick={this.onClick} />
           </div>
           <div>
             <ul>
@@ -118,7 +126,7 @@ export default class App extends Component {
   }
 }
 
-          /*<form>
+          /* <form>
               <input
                 type="text"
                 ref={c => this.title = c}
