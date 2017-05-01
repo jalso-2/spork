@@ -1,12 +1,13 @@
-# Project Name
+# Spork
 
-> Pithy project description
+> Spork is an app that helps users meet up with friends to use up leftovers in their 
+> refrigerator as well as find recipes that best match those leftovers.
 
-## Team
+## Jalso
 
-  - __Product Owner__: teamMember
-  - __Scrum Master__: teamMember
-  - __Development Team Members__: teamMember, teamMember
+  - __Product Owner__: James Goedert
+  - __Scrum Master__: Zachary Bergmann
+  - __Development Team Members__: Jeralisha 
 
 ## Table of Contents
 
@@ -20,15 +21,17 @@
 
 ## Usage
 
-> Some usage instructions
+> To Install and Run: 
+> git clone <repo>
+> cd <repo>
+> npm i
+> npm start
 
 ## Requirements
 
-- Node 0.10.x
-- Redis 2.6.x
-- Postgresql 9.1.x
-- etc
-- etc
+- Node ^7.5.0
+- MongoDB ^2.6.10
+- Webpack ^2.4.1
 
 ## Development
 
@@ -37,9 +40,13 @@
 From within the root directory:
 
 ```sh
-sudo npm install -g bower
-npm install
-bower install
+sudo npm install -g nvm
+nvm install 7.5.0
+nvm use 7.5.0
+
+(cd into repo)
+npm i
+npm start
 ```
 
 ### Roadmap
@@ -50,3 +57,4 @@ View the project roadmap [here](LINK_TO_PROJECT_ISSUES)
 ## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for contribution guidelines.
+Add Comment

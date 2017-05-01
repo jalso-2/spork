@@ -10,14 +10,19 @@ const axios = require('axios');
 export default class MyFavRecipes extends Component {
   constructor(props) {
     super(props);
-    this.state= {
+    this.state = {
       favRecipes: [],
-    }
+    };
     this.myFavorites();
   }
   myFavorites() {
     const params = JSON.parse(localStorage.profile).email;
-    axios.get(`/fav_recipes/${params}`).then(response => this.setState({ favRecipes: response.data }));
+    axios.get(`/fav_recipes/${params}`).then((response) => {
+      console.log(response.data, 'fsdfcjkdsfcbs')
+      if (response.data.likedRecipes) {
+        this.setState({ favRecipes: response.data.likedRecipes });
+      }
+    });
   }
   render() {
     return (
@@ -27,7 +32,7 @@ export default class MyFavRecipes extends Component {
         <div>
           <ol>
             {this.state.favRecipes.slice(-5).map(recipe =>
-              <li>{ recipe }</li>
+              <li>{ recipe }</li>,
             )}
           </ol>
         </div>
@@ -36,7 +41,4 @@ export default class MyFavRecipes extends Component {
   }
 
 }
-    
-
-
 

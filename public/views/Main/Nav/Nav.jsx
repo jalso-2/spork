@@ -5,18 +5,16 @@ import { Link } from 'react-router';
 const Nav = () => (
   <nav className="navbar navbar-default">
     <div className="navbar-header">
-      <Link className="navbar-brand" to="/">Spork</Link>
+      <Link className="navbar-brand" to="/profile">Spork</Link>
     </div>
     <ul className="nav navbar-nav">
       <li>
-      </li>
-      <li>
-        
+        <Link to="/mainMeal">Meal Hunter</Link>        
       </li>
     </ul>
-    <ul className="nav navbar-nav navbar-right">
+    <ul className="nav navbar-nav ">
       <li>
-        
+        <Link to="/get_user_creds">Update Info</Link>        
       </li>
     </ul>
   </nav>
