@@ -13,6 +13,8 @@ import PersonalFridge from '../PersonalFridge/PersonalFridge';
 import AuthService from '../../../utils/AuthService';
 import FriendList from '../FriendList/FriendList';
 import Events from '../Events/Events';
+import Nav from '../Nav/Nav';
+import MyFavRecipes from '../MyFavRecipes/MyFavRecipes';
 
 
 const axios = require('axios');
@@ -74,6 +76,7 @@ export default class App extends Component {
   render() {
     return (
       <div>
+        <Nav navBar={this.props} />
         <Col md={3}>
           <div>
             <FriendList friendLi={this.props} />
@@ -106,6 +109,7 @@ export default class App extends Component {
         </Col>
         <Col md={3} lg={3}>
           <div>
+            <MyFavRecipes myRecipes={this.props} />
             <Events eventLi={this.props} />
           </div>
         </Col>
@@ -114,7 +118,7 @@ export default class App extends Component {
   }
 }
 
-          {/*<form>
+          /*<form>
               <input
                 type="text"
                 ref={c => this.title = c}
@@ -122,4 +126,5 @@ export default class App extends Component {
                 placeholder="Search For Recipies Here"
               />
               <button type="button" onClick={this.getRecipe.bind(this)}>Search Recipes</button>
-            </form>*/}
+            </form>*/
+
