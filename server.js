@@ -121,6 +121,22 @@ app.get('/my_ingredients/*', (req, res) => {
   });
 });
 
+app.delete('/delete_ingredient/*', (req, res) => {
+  const item = req.params[0];
+  console.log('Delete');
+  User.findOneAndUpdate({ username: currentUser }, { $pull: { currentListOfIngredients: item } }, (err, data) => {
+    if (err) {
+      console.error(err);
+    } else {
+      var ingredients;
+      const del = data.currentListOfIngredients.indexOf(item);
+      data.currentListOfIngredients.splice(del, 1); 
+      console.log(item, data.currentListOfIngredients);
+      res.send(data.currentListOfIngredients);
+    }
+  });
+});
+
 app.get('/find_recipe/*', (req, res) => {
   const query = req.params[0].replace('/', '%20');
 
