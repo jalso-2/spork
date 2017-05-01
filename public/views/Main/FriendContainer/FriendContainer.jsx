@@ -7,7 +7,6 @@ const axios = require('axios');
 class FriendContainer extends Component {
   constructor(props) {
     super(props);
-    console.log(props, 'prop container')
     this.state = {
       nickname: JSON.parse(localStorage.profile).nickname,
       friends: [],

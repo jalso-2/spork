@@ -71,6 +71,17 @@ const authCheck = jwt({
   algorithms: ['RS256'],
 });
 
+app.get('/get_matching_users/*', (req, res) => {
+  console.log('hitting the right spot???');
+  User.find({ username: new RegExp(req.params[0], "i") }, (err, results) => {
+    if (!err) {
+      return res.send(200, results);
+    }
+  });
+});
+
+app.get('/get_user/*', (req, res) => User.findOne({ username: req.params[0] }).then(suc => res.send(suc)));
+
 app.put('/update_user', (req, res) => {
   User.update({ username: req.body.username }, req.body, { overwrite: true }, (err) => {
     if (!err) {
@@ -79,6 +90,7 @@ app.put('/update_user', (req, res) => {
     return res.send(500);
   });
 });
+
 
 app.get('/get_user/*', (req, res) => User.findOne({ username: req.params[0] }).then(suc => res.send(suc)));
 
