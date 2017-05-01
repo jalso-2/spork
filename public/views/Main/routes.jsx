@@ -6,7 +6,6 @@ import Login from './Login/Login';
 import Profile from './Profile/Profile';
 
 // import Env from '../../../.env';
-
 // validate authentication for private routes
 
 const requireAuth = (nextState, replace) => {

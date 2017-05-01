@@ -7,8 +7,9 @@ import {
   sendSMS,
   checkUser,
 } from '../../../utils/utils';
-import Ingredient from '../PersonalFridge/PersonalFridge';
+import Ingredient from '../Ingredient/Ingredient';
 import Recipes from '../MealMatcher/MealMatcher';
+import PersonalFridge from '../PersonalFridge/PersonalFridge';
 import AuthService from '../../../utils/AuthService';
 import FriendList from '../FriendList/FriendList';
 import Events from '../Events/Events';
@@ -35,7 +36,7 @@ export default class App extends Component {
     e.preventDefault();
     const value = this.title.value;
     updateIngredients(value);
-    this.resetInput();
+    this.title.value = '';
     this.getMyIngredients();
   }
   getMyIngredients() {
@@ -51,9 +52,7 @@ export default class App extends Component {
     const value = this.title.value;
     this.findRecipe(value);
   }
-  resetInput() {
-    this.title.value = '';
-  }
+
   findRecipe(ingredients) {
     const params = ingredients.replace(',', '/');
     axios.get(`/find_recipe/${params}`)
@@ -81,32 +80,19 @@ export default class App extends Component {
           </div>
         </Col>
         <Col md={6} lg={6}>
-          <form>
-            <input
-              type="text"
-              ref={c => this.title = c}
-              name="title"
-              placeholder="Enter Your Ingredients Here"
-            />
-            <button type="button" onClick={this.onSubmit.bind(this)} >Save</button>
-          </form>
-
-          <div>
-            <ul>
-              {this.state.ingredients
-                .map((item, key) => <Ingredient item={item} key={key} />)}
-            </ul>
-          </div>
           <div>
             <form>
               <input
                 type="text"
                 ref={c => this.title = c}
                 name="title"
-                placeholder="Search For Recipies Here"
+                placeholder="Enter Your Ingredients Here"
               />
-              <button type="button" onClick={this.getRecipe.bind(this)}>Search Recipes</button>
+              <button type="button" onClick={this.onSubmit.bind(this)} >Save</button>
             </form>
+          </div>
+          <div>
+            <PersonalFridge ingredients={this.state.ingredients} />
           </div>
           <div>
             <ul>
@@ -127,3 +113,13 @@ export default class App extends Component {
     );
   }
 }
+
+          {/*<form>
+              <input
+                type="text"
+                ref={c => this.title = c}
+                name="title"
+                placeholder="Search For Recipies Here"
+              />
+              <button type="button" onClick={this.getRecipe.bind(this)}>Search Recipes</button>
+            </form>*/}
