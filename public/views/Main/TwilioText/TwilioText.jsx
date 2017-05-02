@@ -21,8 +21,11 @@ export default class TwilioText extends Component {
     });
   }
   sendMyMsg() {
+    console.log('fcdsajcdskvdkjabvdjvdchdkmvnfjvufdjcn')
     const location = this.state.locationTime.split(',')[0];
     const time = this.state.locationTime.split(',')[1];
+    console.log(location, 'location')
+    console.log(time, 'time')
     sendSMS(location, time);
   }
   render() {

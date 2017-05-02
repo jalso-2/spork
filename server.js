@@ -73,7 +73,7 @@ const authCheck = jwt({
 
 app.get('/get_matching_users/*', (req, res) => {
   console.log('hitting the right spot???');
-  User.find({ username: new RegExp(req.params[0], "i") }, (err, results) => {
+  User.find({ username: new RegExp(req.params[0], 'i') }, (err, results) => {
     if (!err) {
       return res.send(200, results);
     }
@@ -91,7 +91,7 @@ app.put('/update_user', (req, res) => {
   });
 });
 
-app.get('/get_user/*', (req, res) => { 
+app.get('/get_user/*', (req, res) => {
   console.log(req.params[0], 'req.params[0]');
   User.findOne({ username: req.params[0] }, '').then(suc => res.send(suc));
 });
@@ -224,15 +224,55 @@ app.post('/save_recipe', (req, res) => {
 });
 
 app.get('/lets_eat/*/*', (req, res) => {
-  var friends = [currentUser];
-  User.find({ username: currentUser }, 'friendsList', (err, data) => {
-    if (err) {
-      console.error(err, 'Error');
-    } else {
-      console.log(data);
-      res.send(data);
-    }
-  });
+  console.log(req.params[0], req.params[1])
+  // const ingredients = [];
+  // console.log(currentUser, 'currUser');
+  // User.findOne({ username: 'james' }, 'friendsList phoneNumber currentListOfIngredients', (err, data) => {
+  //   if (err) {
+  //     console.error(err, 'Error');
+  //   } else {
+  //     client.messages.create({
+  //       to: `+1${data.phoneNumber}`,
+  //       from: `+${twilioNumber}`,
+  //       body: `Lets have dinner at ${req.params[0]} at around ${req.params[1]}}`,
+  //       // mediaUrl: `${__dirname}/public/assets/sporkText.png`,
+  //     }, (err, message) => {
+  //       if (err) {
+  //         console.error(err, 'Error');
+  //       } else {
+  //         res.send(message);
+  //       }
+  //     });
+  //     console.log(data, 'data');
+  //     ingredients.concat(data.currentListOfIngredients);
+  //     data.friendsList.forEach((person, index) => {
+  //       User.findOne({ username: person }, 'phoneNumber currentListOfIngredients', (error, success) => {
+  //       console.log(person, ingredients, 'person');
+  //         if (error) {
+  //           console.error(err, 'ERROR');
+  //         } else {
+  //           console.log(success, 'success');
+  //           client.messages.create({
+  //             to: `+1${success.phoneNumber}`,
+  //             from: `+${twilioNumber}`,
+  //             body: `Lets have dinner at ${req.params[0]} at around ${req.params[1]}}`,
+  //             // mediaUrl: `${__dirname}/public/assets/sporkText.png`,
+  //           }, (er, message) => {
+  //             if (er) {
+  //               console.error(er, 'Error');
+  //             } else {
+  //               ingredients.concat(success.currentListOfIngredients);
+  //               if (index === data.friendsList.length - 1) {
+  //                 res.send(ingredients);
+  //               }
+  //               res.send(message);
+  //             }
+  //           });
+  //         }
+  //       });
+  //     });
+  //   }
+  // });
   // client.messages.create({
   //   to: `+${testNumber}`,
   //   from: `+${twilioNumber}`,
