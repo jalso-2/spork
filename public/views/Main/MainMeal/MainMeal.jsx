@@ -88,10 +88,10 @@ export default class MainMeal extends Component {
         <Col md={3}>
           <div>
             <form>
-            <Well>
-              <h2>Personal Fridge</h2>
+              <Well>
+                <h2>Personal Fridge</h2>
                 <Button bsStyle="info" type="button" onClick={this.onSubmit.bind(this)} >Show Ingredients</Button>
-            </Well>
+              </Well>
             </form>
             <div>
               <PersonalFridge ingredients={this.state.ingredients} onClick={this.onClick} />
@@ -101,17 +101,18 @@ export default class MainMeal extends Component {
         <Col md={6} lg={6}>
           <div>
             <ul>
-              <Well>
-              <form>
-              <h2>Hey Chef!</h2>
-                <input
-                  type="text"
-                  ref={c => this.title = c}
-                  name="title"
-                  placeholder="Search For Recipies Here"
-                />
-                <Button bsStyle="info" type="button" onClick={this.getRecipe.bind(this)}>Search Recipes</Button>
-              </form>
+              <Well className="row">
+                <form>
+                  <h2>Hey Chef!</h2>
+                  <input
+                    className="col-md-9"
+                    type="text"
+                    ref={c => this.title = c}
+                    name="title"
+                    placeholder="Search For Recipies Here"
+                  />
+                  <Button className="col-md-3" bsStyle="info" type="button" onClick={this.getRecipe.bind(this)}>Search Recipes</Button>
+                </form>
               </Well>
               {this.state.recipies
                 .map((item, key) => <Recipes item={item} key={key} likeRecipe={this.likeRecipe} />)}
@@ -124,16 +125,16 @@ export default class MainMeal extends Component {
             <Well>
               <MyFavRecipes myRecipes={this.props} />
             </Well>
-            <Well>
-              <Events eventLi={this.props} />
-            </Well>
           </div>
         </Col>
         <div>
-        <TwilioText />
+          <TwilioText />
         </div>
       </div>
     );
   }
 }
             // <FriendList friendLi={this.props} />
+            // <Well>
+            //   <Events eventLi={this.props} />
+            // </Well>

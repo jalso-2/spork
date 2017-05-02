@@ -15,7 +15,7 @@ import Events from '../Events/Events';
 import Nav from '../Nav/Nav';
 import MyFavRecipes from '../MyFavRecipes/MyFavRecipes';
 import FriendContainer from '../FriendContainer/FriendContainer';
-
+// import styles from './profile.css';
 
 const axios = require('axios');
 
@@ -83,20 +83,20 @@ export default class App extends Component {
   }
   render() {
     return (
-      <div>
+      <div id="col1">
         <Nav navBar={this.props} />
         <Col md={3}>
           <div>
             <Well>
-            <h2>Company</h2>
-              <FriendContainer profile={this}/>
+              <h2>Friends</h2>
+              <FriendContainer profile={this} />
             </Well>
           </div>
         </Col>
         <Col md={6} lg={6}>
           <div>
             <Well>
-            <h2>What do you got?</h2>            
+              <h2>What would you like to add?</h2>
               <form>
                 <input
                   type="text"
@@ -106,15 +106,11 @@ export default class App extends Component {
                 />
                 <Button bsStyle="info" type="button" onClick={this.onSubmit.bind(this)} >Save</Button>
               </form>
-            </Well>
-          </div>
-          <div>
-            <Well>
               <PersonalFridge ingredients={this.state.ingredients} onClick={this.onClick} />
             </Well>
           </div>
           <div>
-            <Well>          
+            <Well>
               <ul>
                 {this.state.recipies
                   .map((item, key) => <Recipes item={item} key={key} likeRecipe={this.likeRecipe} />)}
@@ -124,12 +120,12 @@ export default class App extends Component {
         </Col>
         <Col md={3} lg={3}>
           <Well>
-            <div>            
+            <div>
               <MyFavRecipes myRecipes={this.props} />
-             </div>
-             </Well>
-             <Well>
-             <div>
+            </div>
+          </Well>
+          <Well>
+            <div>
               <Events eventLi={this.props} />
             </div>
           </Well>
@@ -138,7 +134,7 @@ export default class App extends Component {
     );
   }
 }
-           {/*<form>
+{/*<form>
               <input
                 type="text"
                 ref={c => this.title = c}
@@ -147,7 +143,7 @@ export default class App extends Component {
               />
               <button type="button" onClick={this.getRecipe.bind(this)}>Search Recipes</button>
             </form>*/}
-          {/*<div>
+{/*<div>
             <Button bsStyle="info" type="button" onClick={sendSMS}>Let's Eat!</Button>
           </div>*/}
 

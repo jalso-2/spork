@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import { Button, Col } from 'react-bootstrap';
 import Nav from '../Nav/Nav';
+import { Well } from 'react-bootstrap'; 
 
 
 const axios = require('axios');
@@ -36,8 +37,10 @@ class GetUserCreds extends Component {
       <div>
         <Nav navBar={this.props} />
         <form>
-          <input type="text" onChange={this.handleChange} name="textPhone" value={this.state.textPhone} placeholder="phone number (no dashes/spaces)" />
-          <Button bsStyle="info" onClick={this.updateUser} type="button" >Update My Credentials</Button>
+          <Well className="row">
+            <input className="col-md-4" type="text" onChange={this.handleChange} name="textPhone" value={this.state.textPhone} placeholder="phone number (no dashes/spaces)" />
+            <Button bsStyle="info" onClick={this.updateUser} type="button" >Update My Credentials</Button>
+          </Well>
         </form>
       </div>
     );

@@ -4,17 +4,14 @@ import { Jumbotron } from 'react-bootstrap';
 
 const Container = (props) => {
   let children = null;
-  if(props.children) {
+  if (props.children) {
     children = React.cloneElement(props.children, {
       auth: props.route.auth,
     });
   }
   return (
-    <Jumbotron >
-
-      <h2 >
-        <img src="./public/assets/sporkCrop.png" />
-      </h2>
+    <Jumbotron className="jumbo">
+      <img width="100%" src="./public/assets/sporkCrop.png" />
       {children}
     </Jumbotron>
 

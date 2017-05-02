@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Well } from 'react-bootstrap';
 
 export default class Ingredient extends Component {
   constructor(props) {
@@ -6,6 +7,9 @@ export default class Ingredient extends Component {
   }
 
   render() {
-    return (<li>{this.props.item} </li>);
+    return (
+      <Well>
+        <li className="ingredient">{this.props.item} </li>
+      </Well>);
   }
 }

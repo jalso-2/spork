@@ -1,0 +1,30 @@
+body {
+  background-color: black;
+}
+#col1{
+  background-color: lightblue;
+  
+}
+.jumbo{
+  width: 99%;
+  background-color: lightblue;
+}
+  .jumbo {
+  height:300px;
+  background-repeat: no-repeat;
+  background-size: cover;
+  border-bottom:1px solid #ff6a00
+}
+ .ingredient {
+  list-style: none;
+  font-size: 1.5em;
+}
+.recipeItem{
+  list-style:none;
+}
+.recipeTitle{
+  font-size: 1.5em;
+}
+.recipeDescription{
+  font-size: 1em;
+}
