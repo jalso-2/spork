@@ -11,10 +11,8 @@ const saveRecipe = (recipe) => {
 };
 
 const sendSMS = (location, time) => {
-  console.log(location, 'loc')
-  console.log(time, 'time')
   axios.get(`/lets_eat/${location}/${time}`)
-    .then(response => response);
+    .then(response => console.log(response));
 };
 
 const checkUser = (profile, cb) => {

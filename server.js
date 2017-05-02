@@ -80,8 +80,6 @@ app.get('/get_matching_users/*', (req, res) => {
   });
 });
 
-app.get('/get_user/*', (req, res) => User.findOne({ username: req.params[0] }).then(suc => res.send(suc)));
-
 app.put('/update_user', (req, res) => {
   User.update({ username: req.body.username }, req.body, { overwrite: true }, (err) => {
     if (!err) {
@@ -92,8 +90,21 @@ app.put('/update_user', (req, res) => {
 });
 
 app.get('/get_user/*', (req, res) => {
-  console.log(req.params[0], 'req.params[0]');
-  User.findOne({ username: req.params[0] }, '').then(suc => res.send(suc));
+  let ingredients = [];
+
+  User.findOne({ username: req.params[0] }, 'friendsList currentListOfIngredients')
+    .then(suc => {
+      ingredients = ingredients.concat(suc.currentListOfIngredients);
+      suc.friendsList.forEach( (friend, index) => {
+        User.findOne({ username: friend }, 'currentListOfIngredients')
+          .then((resp) => {
+            ingredients = ingredients.concat(resp.currentListOfIngredients);
+            if (index === suc.friendsList.length - 1) {
+              res.send(ingredients);
+            }
+          });
+      });
+    });
 });
 
 app.post('/check_user', (req, res) => {
@@ -224,67 +235,53 @@ app.post('/save_recipe', (req, res) => {
 });
 
 app.get('/lets_eat/*/*', (req, res) => {
-  console.log(req.params[0], req.params[1])
-  // const ingredients = [];
-  // console.log(currentUser, 'currUser');
-  // User.findOne({ username: 'james' }, 'friendsList phoneNumber currentListOfIngredients', (err, data) => {
-  //   if (err) {
-  //     console.error(err, 'Error');
-  //   } else {
-  //     client.messages.create({
-  //       to: `+1${data.phoneNumber}`,
-  //       from: `+${twilioNumber}`,
-  //       body: `Lets have dinner at ${req.params[0]} at around ${req.params[1]}}`,
-  //       // mediaUrl: `${__dirname}/public/assets/sporkText.png`,
-  //     }, (err, message) => {
-  //       if (err) {
-  //         console.error(err, 'Error');
-  //       } else {
-  //         res.send(message);
-  //       }
-  //     });
-  //     console.log(data, 'data');
-  //     ingredients.concat(data.currentListOfIngredients);
-  //     data.friendsList.forEach((person, index) => {
-  //       User.findOne({ username: person }, 'phoneNumber currentListOfIngredients', (error, success) => {
-  //       console.log(person, ingredients, 'person');
-  //         if (error) {
-  //           console.error(err, 'ERROR');
-  //         } else {
-  //           console.log(success, 'success');
-  //           client.messages.create({
-  //             to: `+1${success.phoneNumber}`,
-  //             from: `+${twilioNumber}`,
-  //             body: `Lets have dinner at ${req.params[0]} at around ${req.params[1]}}`,
-  //             // mediaUrl: `${__dirname}/public/assets/sporkText.png`,
-  //           }, (er, message) => {
-  //             if (er) {
-  //               console.error(er, 'Error');
-  //             } else {
-  //               ingredients.concat(success.currentListOfIngredients);
-  //               if (index === data.friendsList.length - 1) {
-  //                 res.send(ingredients);
-  //               }
-  //               res.send(message);
-  //             }
-  //           });
-  //         }
-  //       });
-  //     });
-  //   }
-  // });
-  // client.messages.create({
-  //   to: `+${testNumber}`,
-  //   from: `+${twilioNumber}`,
-  //   body: `Lets have dinner at ${req.params[0]} at around ${req.params[1]}}`,
-  //   mediaUrl: `${__dirname}/public/assets/sporkText.png`,
-  // }, (err, message) => {
-  //   if (err) {
-  //     console.error(err, 'Error');
-  //   } else {
-  //     res.send(message);
-  //   }
-  // });
+  let ingredients = [];
+  User.findOne({ username: 'james' }, 'friendsList phoneNumber currentListOfIngredients', (err, data) => {
+    if (err) {
+      console.error(err, 'Error');
+    } else {
+      client.messages.create({
+        to: `+1${data.phoneNumber}`,
+        from: `+${twilioNumber}`,
+        body: `Lets have dinner at ${req.params[0]} at around ${req.params[1]}}`,
+        mediaUrl: 'https://www.google.com/url?sa=i&rct=j&q=&esrc=s&source=images&cd=&cad=rja&uact=8&ved=0ahUKEwiO9q7Dv9DTAhWF4CYKHSuUDAUQjRwIBw&url=https%3A%2F%2Ftwitter.com%2Fsporkpgh&psig=AFQjCNFwGdI4YAcj3EU8CiHDqJgtbOOqfw&ust=1493789960411839',
+      }, (err, message) => {
+        if (err) {
+          console.error(err, 'Error');
+        } else {
+          res.send(message);
+        }
+      });
+      console.log(data, 'data');
+      ingredients = ingredients.concat(data.currentListOfIngredients);
+      data.friendsList.forEach((person, index) => {
+        User.findOne({ username: person }, 'phoneNumber currentListOfIngredients', (error, success) => {
+        console.log(person, ingredients, 'person');
+          if (error) {
+            console.error(err, 'ERROR');
+          } else {
+            console.log(success, 'success');
+            client.messages.create({
+              to: `+1${success.phoneNumber}`,
+              from: `+${twilioNumber}`,
+              body: `Lets have dinner at ${req.params[0]} at around ${req.params[1]}}`,
+            }, (er, message) => {
+              if (er) {
+                console.error(er, 'Error');
+              } else {
+                ingredients = ingredients.concat(success.currentListOfIngredients);
+                if (index === data.friendsList.length - 1) {
+                  res.send(ingredients);
+                } else {
+                  res.send(message);
+                }
+              }
+            });
+          }
+        });
+      });
+    }
+  });
 });
 
 app.get('/my_meals/*', (req, res) => {

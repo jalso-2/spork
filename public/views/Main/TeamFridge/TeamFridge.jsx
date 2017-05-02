@@ -14,6 +14,7 @@ export default class TeamFridge extends Component {
     this.getIngreds();
   }
   getIngreds() {
+    console.log('get team ingreds')
     axios.get(`/get_user/${this.state.nickname}`).then(resp => this.setState({ ingreds: resp.data }));
   }
   render() {
