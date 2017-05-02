@@ -4,7 +4,6 @@ import { ButtonToolbar, Button, Col } from 'react-bootstrap';
 import {
   updateIngredients,
   saveRecipe,
-  sendSMS,
   checkUser,
 } from '../../../utils/utils';
 import Ingredient from '../Ingredient/Ingredient';

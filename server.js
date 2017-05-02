@@ -91,8 +91,10 @@ app.put('/update_user', (req, res) => {
   });
 });
 
-
-app.get('/get_user/*', (req, res) => User.findOne({ username: req.params[0] }).then(suc => res.send(suc)));
+app.get('/get_user/*', (req, res) => { 
+  console.log(req.params[0], 'req.params[0]');
+  User.findOne({ username: req.params[0] }, '').then(suc => res.send(suc));
+});
 
 app.post('/check_user', (req, res) => {
   const username = req.body.profile.nickname;
@@ -221,19 +223,28 @@ app.post('/save_recipe', (req, res) => {
   });
 });
 
-app.get('/lets_eat', (req, res) => {
-  client.messages.create({
-    to: `+${testNumber}`,
-    from: `+${twilioNumber}`,
-    body: 'This is the ship that made the Kessel Run in fourteen parsecs?',
-    mediaUrl: 'https://c1.staticflickr.com/3/2899/14341091933_1e92e62d12_b.jpg',
-  }, (err, message) => {
+app.get('/lets_eat/*/*', (req, res) => {
+  var friends = [currentUser];
+  User.find({ username: currentUser }, 'friendsList', (err, data) => {
     if (err) {
       console.error(err, 'Error');
     } else {
-      res.send(message);
+      console.log(data);
+      res.send(data);
     }
   });
+  // client.messages.create({
+  //   to: `+${testNumber}`,
+  //   from: `+${twilioNumber}`,
+  //   body: `Lets have dinner at ${req.params[0]} at around ${req.params[1]}}`,
+  //   mediaUrl: `${__dirname}/public/assets/sporkText.png`,
+  // }, (err, message) => {
+  //   if (err) {
+  //     console.error(err, 'Error');
+  //   } else {
+  //     res.send(message);
+  //   }
+  // });
 });
 
 app.get('/my_meals/*', (req, res) => {
