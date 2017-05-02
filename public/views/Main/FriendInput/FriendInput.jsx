@@ -63,7 +63,8 @@ class FriendInput extends Component {
           placeholder="username"
         />
         {(Array.isArray(this.state.topFive) && this.state.topFive.length > 0) ?
-          this.state.topFive.map(person => <Friend
+          this.state.topFive.map(person =>
+          <Friend
             clickHandler={this.jointClickHandlers}
             person={person.username}
             key={person.username}

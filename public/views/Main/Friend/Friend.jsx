@@ -14,3 +14,4 @@ Friend.propTypes = {
   username: PropTypes.string.isRequired,
   clickHandler: PropTypes.func.isRequired,
 };
+
