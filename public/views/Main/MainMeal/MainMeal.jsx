@@ -1,6 +1,6 @@
 /* global localStorage */
 import React, { Component } from 'react';
-import { ButtonToolbar, Button, Col } from 'react-bootstrap';
+import { ButtonToolbar, Button, Col, Well } from 'react-bootstrap';
 import {
   updateIngredients,
   saveRecipe,
@@ -88,8 +88,10 @@ export default class MainMeal extends Component {
         <Col md={3}>
           <div>
             <form>
-             <h2>Personal Fridge</h2>
-              <Button bsStyle="info" type="button" onClick={this.onSubmit.bind(this)} >Show Ingredients</Button>
+            <Well>
+              <h2>Personal Fridge</h2>
+                <Button bsStyle="info" type="button" onClick={this.onSubmit.bind(this)} >Show Ingredients</Button>
+            </Well>
             </form>
             <div>
               <PersonalFridge ingredients={this.state.ingredients} onClick={this.onClick} />
@@ -99,6 +101,7 @@ export default class MainMeal extends Component {
         <Col md={6} lg={6}>
           <div>
             <ul>
+              <Well>
               <form>
               <h2>Hey Chef!</h2>
                 <input
@@ -109,6 +112,7 @@ export default class MainMeal extends Component {
                 />
                 <Button bsStyle="info" type="button" onClick={this.getRecipe.bind(this)}>Search Recipes</Button>
               </form>
+              </Well>
               {this.state.recipies
                 .map((item, key) => <Recipes item={item} key={key} likeRecipe={this.likeRecipe} />)}
             </ul>
@@ -117,8 +121,12 @@ export default class MainMeal extends Component {
         </Col>
         <Col md={3} lg={3}>
           <div>
-            <MyFavRecipes myRecipes={this.props} />
-            <Events eventLi={this.props} />
+            <Well>
+              <MyFavRecipes myRecipes={this.props} />
+            </Well>
+            <Well>
+              <Events eventLi={this.props} />
+            </Well>
           </div>
         </Col>
         <div>

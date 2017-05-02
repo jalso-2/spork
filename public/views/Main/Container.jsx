@@ -1,6 +1,7 @@
 import React from 'react';
 import { Jumbotron } from 'react-bootstrap';
 
+
 const Container = (props) => {
   let children = null;
   if(props.children) {
@@ -9,12 +10,14 @@ const Container = (props) => {
     });
   }
   return (
-    <Jumbotron>
+    <Jumbotron >
+
       <h2 >
-        <img src="./public/assets/sporkText.png" />
+        <img src="./public/assets/sporkCrop.png" />
       </h2>
       {children}
     </Jumbotron>
+
   );
 };
 
