@@ -1,29 +1,20 @@
 import React, { Component } from 'react';
 import Friend from '../Friend/Friend';
-//get db to gather friends....
+import PropTypes from 'prop-types';
 
 class FriendList extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
-    this.clickHandler = this.clickHandler.bind(this);
   }
-  clickHandler() {
-    console.log(this);
-  }
-
   render() {
-    const friendList = [{ username: 'mike' }, { username: 'mikey' }, { username: 'mikeal' }];
-    console.log("FRIENDLIST", friendList, "PROPS", this.props);
     return (
       <div>
-       {friendList.map(friend => <Friend clickHandler={this.clickHandler} username={friend.username} key={friend.username} />)}
+        {console.log('this is this.props.friends', this.props.friends)}
+        {this.props.friends.length ? this.props.friends.map(friend => <Friend clickHandler={this.props.removeFriendClick} person={friend} key={friend} />) : ''}
       </div>
     );
   }
 }
 
 export default FriendList;
-
-
 

@@ -4,7 +4,8 @@ import AuthService from '../../utils/AuthService';
 import Container from './Container';
 import Login from './Login/Login';
 import Profile from './Profile/Profile';
-
+import GetUserCreds from './GetUserCreds/GetUserCreds';
+import MainMeal from './MainMeal/MainMeal';
 // import Env from '../../../.env';
 // validate authentication for private routes
 
@@ -19,6 +20,8 @@ export const makeMainRoutes = () => (
     <IndexRedirect to="/login" />
     <Route path="profile" component={Profile} onEnter={requireAuth} />
     <Route path="login" component={Login} />
+    <Route path="get_user_creds" component={GetUserCreds} />
+    <Route path="mainMeal" component={MainMeal} />
   </Route>
 );
 

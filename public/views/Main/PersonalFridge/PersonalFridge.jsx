@@ -13,7 +13,6 @@ export default class PersonalFridge extends Component {
   }
   render() {
     return (<div>
-      Personal Fridge
       <ul>
         {this.props.ingredients
           .map((item, key) => <span > <Ingredient item={item} key={key} />  <Button name={item} bsStyle="danger" onClick={this.props.onClick.bind(item)} /> </span>)}

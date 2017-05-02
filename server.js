@@ -71,6 +71,17 @@ const authCheck = jwt({
   algorithms: ['RS256'],
 });
 
+app.put('/update_user', (req, res) => {
+  User.update({ username: req.body.username }, req.body, { overwrite: true }, (err) => {
+    if (!err) {
+      return res.send(200);
+    }
+    return res.send(500);
+  });
+});
+
+app.get('/get_user/*', (req, res) => User.findOne({ username: req.params[0] }).then(suc => res.send(suc)));
+
 app.post('/check_user', (req, res) => {
   const username = req.body.profile.nickname;
   const phoneNumber = req.body.profile.phoneNumber;
@@ -83,6 +94,7 @@ app.post('/check_user', (req, res) => {
   User.findOne({ username }, (err) => {
     if (err) {
       console.error(err, 'Error');
+      res.send('Error');
     } else {
       user.save((error, person) => {
         if (error) {
@@ -123,15 +135,13 @@ app.get('/my_ingredients/*', (req, res) => {
 
 app.delete('/delete_ingredient/*', (req, res) => {
   const item = req.params[0];
-  console.log('Delete');
-  User.findOneAndUpdate({ username: currentUser }, { $pull: { currentListOfIngredients: item } }, (err, data) => {
+  User.findOneAndUpdate({ username: currentUser },
+  { $pull: { currentListOfIngredients: item } }, (err, data) => {
     if (err) {
       console.error(err);
     } else {
-      var ingredients;
       const del = data.currentListOfIngredients.indexOf(item);
-      data.currentListOfIngredients.splice(del, 1); 
-      console.log(item, data.currentListOfIngredients);
+      data.currentListOfIngredients.splice(del, 1);
       res.send(data.currentListOfIngredients);
     }
   });
@@ -159,7 +169,7 @@ app.post('/save_recipe', (req, res) => {
     recipeName: recipeName.name,
     image: recipeName.image,
     ingredients: recipeName.ingredients,
-    url: recipeName.url
+    url: recipeName.url,
   });
 
   Recipe.find({ recipeName: recipeName.name }, (err) => {
@@ -216,7 +226,6 @@ app.get('/lets_eat', (req, res) => {
 
 app.get('/my_meals/*', (req, res) => {
   User.find({ _id: req.params[0] }).then((err, suc) => {
-    console.log('success or failure');
     if (!err) {
       return res.send(200, suc);
     }
@@ -225,7 +234,6 @@ app.get('/my_meals/*', (req, res) => {
 });
 
 app.post('/make_new_meal', (req, res) => {
-  console.log(req.body.data);
   const host = req.body.data.meal.host;
   const teamFridge = req.body.data.meal.teamFridge;
   const location = req.body.data.meal.location;
@@ -272,8 +280,41 @@ app.get('/fav_recipes/*', (req, res) => {
     if (err) {
       console.error(err);
     } else {
-      res.send(data[0].likedRecipes);
+      res.send(data[0]);
     }
   });
 });
+
+app.get('/get_matching_users/*', (req, res) => {
+  User.find({ username: new RegExp(req.params[0], 'i') }, (err, results) => {
+    if (!err) {
+      return res.send(200, results);
+    }
+  });
+});
+
+app.post('/add_friend', (req, res) => {
+  User.updateOne({ username: req.body.body[0] },
+   { $push: { friendsList: req.body.body[1] } }, (err) => {
+     if (err) {
+       console.error(err, 'Error');
+     } else {
+       User.updateOne({ username: req.body.body[1] },
+        { $push: { friendsList: req.body.body[0] } }, (error, success) => {
+          if (error) {
+            console.error(error, 'Error');
+          } else {
+            User.find({ username: req.body.body[0] }, 'friendsList', (problem, friends) => {
+              if (problem) {
+                console.error(problem, 'Error');
+              } else {
+                res.send(friends);
+              }
+            });
+          }
+        });
+     }
+   });
+});
+
 app.get('*', (req, res) => res.sendFile(path.resolve(__dirname, 'index.html')));
