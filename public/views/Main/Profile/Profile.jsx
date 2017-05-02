@@ -1,6 +1,6 @@
 /* global localStorage */
 import React, { Component } from 'react';
-import { ButtonToolbar, Button, Col } from 'react-bootstrap';
+import { ButtonToolbar, Button, Col, Well } from 'react-bootstrap';
 import {
   updateIngredients,
   saveRecipe,
@@ -15,7 +15,7 @@ import Events from '../Events/Events';
 import Nav from '../Nav/Nav';
 import MyFavRecipes from '../MyFavRecipes/MyFavRecipes';
 import FriendContainer from '../FriendContainer/FriendContainer';
-
+// import styles from './profile.css';
 
 const axios = require('axios');
 
@@ -83,48 +83,58 @@ export default class App extends Component {
   }
   render() {
     return (
-      <div>
+      <div id="col1">
         <Nav navBar={this.props} />
         <Col md={3}>
           <div>
-            <h2>Company</h2>
-            <FriendContainer profile={this}/>
+            <Well>
+              <h2>Friends</h2>
+              <FriendContainer profile={this} />
+            </Well>
           </div>
         </Col>
         <Col md={6} lg={6}>
           <div>
-            <h2>What do you got?</h2>            
-            <form>
-              <input
-                type="text"
-                ref={c => this.title = c}
-                name="title"
-                placeholder="Enter Your Ingredients Here"
-              />
-              <Button bsStyle="info" type="button" onClick={this.onSubmit.bind(this)} >Save</Button>
-            </form>
+            <Well>
+              <h2>What would you like to add?</h2>
+              <form>
+                <input
+                  type="text"
+                  ref={c => this.title = c}
+                  name="title"
+                  placeholder="Enter Your Ingredients Here"
+                />
+                <Button bsStyle="info" type="button" onClick={this.onSubmit.bind(this)} >Save</Button>
+              </form>
+              <PersonalFridge ingredients={this.state.ingredients} onClick={this.onClick} />
+            </Well>
           </div>
           <div>
-            <PersonalFridge ingredients={this.state.ingredients} onClick={this.onClick} />
-          </div>
-          <div>
-            <ul>
-              {this.state.recipies
-                .map((item, key) => <Recipes item={item} key={key} likeRecipe={this.likeRecipe} />)}
-            </ul>
+            <Well>
+              <ul>
+                {this.state.recipies
+                  .map((item, key) => <Recipes item={item} key={key} likeRecipe={this.likeRecipe} />)}
+              </ul>
+            </Well>
           </div>
         </Col>
         <Col md={3} lg={3}>
-          <div>            
-            <MyFavRecipes myRecipes={this.props} />
-            <Events eventLi={this.props} />
-          </div>
+          <Well>
+            <div>
+              <MyFavRecipes myRecipes={this.props} />
+            </div>
+          </Well>
+          <Well>
+            <div>
+              <Events eventLi={this.props} />
+            </div>
+          </Well>
         </Col>
       </div>
     );
   }
 }
-           {/*<form>
+{/*<form>
               <input
                 type="text"
                 ref={c => this.title = c}
@@ -133,7 +143,7 @@ export default class App extends Component {
               />
               <button type="button" onClick={this.getRecipe.bind(this)}>Search Recipes</button>
             </form>*/}
-          {/*<div>
+{/*<div>
             <Button bsStyle="info" type="button" onClick={sendSMS}>Let's Eat!</Button>
           </div>*/}
 
