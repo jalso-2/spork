@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import IngredientTeam from '../IngredientTeam/IngredientTeam';
+import { Well } from 'react-bootstrap';
 
 const axios = require('axios');
 
@@ -14,14 +15,13 @@ export default class TeamFridge extends Component {
     this.getIngreds();
   }
   getIngreds() {
-    console.log('get team ingreds')
     axios.get(`/get_user/${this.state.nickname}`).then(resp => this.setState({ ingreds: resp.data }));
   }
   render() {
-    return (<div>
+    return (<div className>
       <ul>
         {this.state.ingreds
-          .map(ingred => <IngredientTeam ingred={ingred} key={ingred} />)}
+          .map(ingred => <Well> <IngredientTeam ingred={ingred} key={ingred} /></Well>)}
       </ul>
     </div>);
   }
