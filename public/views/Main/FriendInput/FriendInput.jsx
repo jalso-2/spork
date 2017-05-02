@@ -41,13 +41,14 @@ class FriendInput extends Component {
     this.getPotentialFriends(value);
   }
 
-  clickRemovePotential(username) {
+  clickRemovePotential() {
     const newTops = this.state.topFive;
     newTops.splice(newTops.indexOf(username), 1);
     this.setState({ topFive: newTops });
   }
 
-  jointClickHandlers(e) {
+  jointClickHandlers(event) {
+    console.log(event.target.name, 'e.target.name');
     this.props.addFriendClick(e.target.name);
     this.clickRemovePotential(e.target.name);
   }
@@ -64,11 +65,11 @@ class FriendInput extends Component {
         />
         {(Array.isArray(this.state.topFive) && this.state.topFive.length > 0) ?
           this.state.topFive.map(person =>
-          <Friend
-            clickHandler={this.jointClickHandlers}
-            person={person.username}
-            key={person.username}
-          />) :
+            <Friend
+              clickHandler={this.jointClickHandlers}
+              person={person.username}
+              key={person.username}
+            />) :
           ''
         }
       </div>

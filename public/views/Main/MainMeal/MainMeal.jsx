@@ -4,17 +4,15 @@ import { ButtonToolbar, Button, Col } from 'react-bootstrap';
 import {
   updateIngredients,
   saveRecipe,
-  sendSMS,
   checkUser,
 } from '../../../utils/utils';
-import Ingredient from '../Ingredient/Ingredient';
 import Recipes from '../MealMatcher/MealMatcher';
 import PersonalFridge from '../PersonalFridge/PersonalFridge';
-import AuthService from '../../../utils/AuthService';
-import FriendList from '../FriendList/FriendList';
 import Events from '../Events/Events';
 import Nav from '../Nav/Nav';
 import MyFavRecipes from '../MyFavRecipes/MyFavRecipes';
+import TwilioText from '../TwilioText/TwilioText';
+import TeamFridge from '../TeamFridge/TeamFridge';
 
 const axios = require('axios');
 
@@ -114,6 +112,7 @@ export default class MainMeal extends Component {
               {this.state.recipies
                 .map((item, key) => <Recipes item={item} key={key} likeRecipe={this.likeRecipe} />)}
             </ul>
+            <TeamFridge />
           </div>
         </Col>
         <Col md={3} lg={3}>
@@ -123,7 +122,7 @@ export default class MainMeal extends Component {
           </div>
         </Col>
         <div>
-          <Button bsStyle="info" type="button" onClick={sendSMS}>Let's Eat!</Button>
+        <TwilioText />
         </div>
       </div>
     );

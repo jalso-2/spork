@@ -73,14 +73,12 @@ const authCheck = jwt({
 
 app.get('/get_matching_users/*', (req, res) => {
   console.log('hitting the right spot???');
-  User.find({ username: new RegExp(req.params[0], "i") }, (err, results) => {
+  User.find({ username: new RegExp(req.params[0], 'i') }, (err, results) => {
     if (!err) {
       return res.send(200, results);
     }
   });
 });
-
-app.get('/get_user/*', (req, res) => User.findOne({ username: req.params[0] }).then(suc => res.send(suc)));
 
 app.put('/update_user', (req, res) => {
   User.update({ username: req.body.username }, req.body, { overwrite: true }, (err) => {
@@ -91,8 +89,23 @@ app.put('/update_user', (req, res) => {
   });
 });
 
+app.get('/get_user/*', (req, res) => {
+  let ingredients = [];
 
-app.get('/get_user/*', (req, res) => User.findOne({ username: req.params[0] }).then(suc => res.send(suc)));
+  User.findOne({ username: req.params[0] }, 'friendsList currentListOfIngredients')
+    .then(suc => {
+      ingredients = ingredients.concat(suc.currentListOfIngredients);
+      suc.friendsList.forEach( (friend, index) => {
+        User.findOne({ username: friend }, 'currentListOfIngredients')
+          .then((resp) => {
+            ingredients = ingredients.concat(resp.currentListOfIngredients);
+            if (index === suc.friendsList.length - 1) {
+              res.send(ingredients);
+            }
+          });
+      });
+    });
+});
 
 app.post('/check_user', (req, res) => {
   const username = req.body.profile.nickname;
@@ -221,17 +234,52 @@ app.post('/save_recipe', (req, res) => {
   });
 });
 
-app.get('/lets_eat', (req, res) => {
-  client.messages.create({
-    to: `+${testNumber}`,
-    from: `+${twilioNumber}`,
-    body: 'This is the ship that made the Kessel Run in fourteen parsecs?',
-    mediaUrl: 'https://c1.staticflickr.com/3/2899/14341091933_1e92e62d12_b.jpg',
-  }, (err, message) => {
+app.get('/lets_eat/*/*', (req, res) => {
+  let ingredients = [];
+  User.findOne({ username: 'james' }, 'friendsList phoneNumber currentListOfIngredients', (err, data) => {
     if (err) {
       console.error(err, 'Error');
     } else {
-      res.send(message);
+      client.messages.create({
+        to: `+1${data.phoneNumber}`,
+        from: `+${twilioNumber}`,
+        body: `Lets have dinner at ${req.params[0]} at around ${req.params[1]}}`,
+        mediaUrl: 'https://www.google.com/url?sa=i&rct=j&q=&esrc=s&source=images&cd=&cad=rja&uact=8&ved=0ahUKEwiO9q7Dv9DTAhWF4CYKHSuUDAUQjRwIBw&url=https%3A%2F%2Ftwitter.com%2Fsporkpgh&psig=AFQjCNFwGdI4YAcj3EU8CiHDqJgtbOOqfw&ust=1493789960411839',
+      }, (err, message) => {
+        if (err) {
+          console.error(err, 'Error');
+        } else {
+          res.send(message);
+        }
+      });
+      console.log(data, 'data');
+      ingredients = ingredients.concat(data.currentListOfIngredients);
+      data.friendsList.forEach((person, index) => {
+        User.findOne({ username: person }, 'phoneNumber currentListOfIngredients', (error, success) => {
+        console.log(person, ingredients, 'person');
+          if (error) {
+            console.error(err, 'ERROR');
+          } else {
+            console.log(success, 'success');
+            client.messages.create({
+              to: `+1${success.phoneNumber}`,
+              from: `+${twilioNumber}`,
+              body: `Lets have dinner at ${req.params[0]} at around ${req.params[1]}}`,
+            }, (er, message) => {
+              if (er) {
+                console.error(er, 'Error');
+              } else {
+                ingredients = ingredients.concat(success.currentListOfIngredients);
+                if (index === data.friendsList.length - 1) {
+                  res.send(ingredients);
+                } else {
+                  res.send(message);
+                }
+              }
+            });
+          }
+        });
+      });
     }
   });
 });
