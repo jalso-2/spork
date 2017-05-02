@@ -10,8 +10,8 @@ const saveRecipe = (recipe) => {
     .then(response => response);
 };
 
-const sendSMS = () => {
-  axios.get('/lets_eat')
+const sendSMS = (location, time) => {
+  axios.get(`/lets_eat/${location}/${time}`)
     .then(response => response);
 };
 
