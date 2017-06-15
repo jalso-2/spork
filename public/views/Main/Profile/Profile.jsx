@@ -124,16 +124,16 @@ export default class App extends Component {
               <MyFavRecipes myRecipes={this.props} />
             </div>
           </Well>
-          <Well>
-            <div>
-              <Events eventLi={this.props} />
-            </div>
-          </Well>
         </Col>
       </div>
     );
   }
 }
+          {/*<Well>
+            <div>
+              <Events eventLi={this.props} />
+            </div>
+          </Well>*/}
 {/*<form>
               <input
                 type="text"

@@ -8,6 +8,7 @@ import GetUserCreds from './GetUserCreds/GetUserCreds';
 import MainMeal from './MainMeal/MainMeal';
 // import Env from '../../../.env';
 
+const auth = new AuthService(); // Fill these in from .env
 // validate authentication for private routes
 
 const requireAuth = (nextState, replace) => {
