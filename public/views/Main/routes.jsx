@@ -6,7 +6,6 @@ import Login from './Login/Login';
 import Profile from './Profile/Profile';
 import GetUserCreds from './GetUserCreds/GetUserCreds';
 import MainMeal from './MainMeal/MainMeal';
-// import Env from '../../../.env';
 
 const auth = new AuthService(); // Fill these in from .env
 
