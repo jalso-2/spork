@@ -1,28 +1,4 @@
-import React, { Component } from 'react';
-
 const axios = require('axios');
-
-class Ingredient extends Component {
-  render() {
-    return (<li>{this.props.item}</li>);
-  }
-}
-
-class Recipes extends Component {
-  render() {
-    return (<li ref={c => this.title = c} name="title">
-      <div>{this.props.item.name}</div>
-      <div><img alt={`${this.props.item.name}`} src={this.props.item.image} /></div>
-      <div>{this.props.item.ingredients}</div>
-      <div>{this.props.item.url}</div>
-      <button
-        type="button"
-        onClick={this.props.likeRecipe.bind(this, this.props.item)}
-      >Like</button>
-    </li>
-    );
-  }
-}
 
 const updateIngredients = (ingredient) => {
   axios.post('/my_ingredients', { ingredient })
@@ -34,14 +10,22 @@ const saveRecipe = (recipe) => {
     .then(response => response);
 };
 
-const sendSMS = () => {
-  axios.get('/lets_eat')
+const sendSMS = (location, time) => {
+  axios.get(`/lets_eat/${location}/${time}`)
     .then(response => console.log(response));
-  console.log('sms clicked');
+};
+
+const checkUser = (profile, cb) => {
+  axios.post('/check_user', { profile })
+    .then(() => cb());
+};
+
+const myFavorites = (person) => {
+  console.log("MYFAVORITES");
 };
 
 module.exports.updateIngredients = updateIngredients;
 module.exports.saveRecipe = saveRecipe;
 module.exports.sendSMS = sendSMS;
-module.exports.Ingredient = Ingredient;
-module.exports.Recipes = Recipes;
+module.exports.checkUser = checkUser;
+module.exports.myFavorites = myFavorites;

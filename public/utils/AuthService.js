@@ -20,13 +20,12 @@ export default class AuthService extends EventEmitter {
     // binds login functions to keep this context
     this.login = this.login.bind(this);
   }
-  
 
   _doAuthentication(authResult) {
     // Saves the user token
     this.setToken(authResult.idToken);
     // navigate to the home route
-    browserHistory.replace('/home');
+    browserHistory.replace('/profile');
     // Async loads the user profile data
     this.lock.getProfile(authResult.idToken, (error, profile) => {
       if (error) {

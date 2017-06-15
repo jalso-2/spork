@@ -1,20 +1,20 @@
 import React from 'react';
 import { Jumbotron } from 'react-bootstrap';
 
+
 const Container = (props) => {
   let children = null;
-  if(props.children) {
+  if (props.children) {
     children = React.cloneElement(props.children, {
       auth: props.route.auth,
     });
   }
   return (
-    <Jumbotron>
-      <h2 >
-        <img src="https://cdn.auth0.com/styleguide/1.0.0/img/badge.svg" />
-      </h2>
+    <Jumbotron className="jumbo">
+      <img width="100%" src="./public/assets/sporkCrop.png" />
       {children}
     </Jumbotron>
+
   );
 };
 

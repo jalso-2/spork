@@ -4,11 +4,7 @@ const userSchema = mongoose.Schema({
   username: {
     type: String,
     required: true,
-  },
-
-  password: {
-    type: String,
-    required: true,
+    unique: true,
   },
 
   image: String,
@@ -22,6 +18,8 @@ const userSchema = mongoose.Schema({
   friendsList: Array,
 
   likedRecipes: Array,
+
+  meals: Array,
 });
 
 const User = mongoose.model('User', userSchema);
